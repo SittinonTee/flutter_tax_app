@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Income/incom.dart';
 
 class Boxcontent extends StatefulWidget {
   const Boxcontent({super.key});
@@ -97,7 +98,14 @@ class _BoxcontentState extends State<Boxcontent> {
                     ),
                   ],
                 ),
-                const Icon(Icons.add_circle, color: Colors.white, size: 50),
+                IconButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const incomepage())),
+                  icon: const Icon(Icons.add_circle,
+                      color: Colors.white, size: 50),
+                )
               ],
             ),
           ),
