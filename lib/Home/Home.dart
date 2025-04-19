@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/BalanceCard.dart';
 import 'package:flutter_tax_app/Home/Boxcontent.dart';
 import 'TopBar.dart';
+import 'package:flutter_tax_app/Login/Login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     const ChartPage(),
     const AddPage(),
     const NotificationsPage(),
-    const MorePage(),
+    const ProfilePage(),
   ];
 
   @override
@@ -191,19 +192,6 @@ class NotificationsPage extends StatelessWidget {
   }
 }
 
-class MorePage extends StatelessWidget {
-  const MorePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "More Page",
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
 
 class AddPage extends StatelessWidget {
   const AddPage({super.key});
@@ -238,6 +226,116 @@ class AddPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(20), //padding เนื้อหา
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // จัดเนื้อหาแบบแนวนอน
+          children: [
+            
+            const SizedBox(height: 20), // กล่องให้ห่างจากข้างบน 20
+            const Text(
+              'ชื่อผู้ใช้งาน',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),
+            ),
+
+            const SizedBox(height: 10), // กล่องให้ห่างจากข้างบน 10
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'Buranasak',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+
+
+            const SizedBox(height: 20),
+            const Text(
+              'อีเมล',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration( //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'Buranasak2303@gmail.com',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+
+
+            const SizedBox(height: 20),
+            const Text(
+              'เบอร์โทร',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration( //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                '0982468157',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            const Spacer(),
+            const SizedBox(height: 40),
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    padding: const EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'ออกจากระบบ',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            
+          ],
+        ),
       ),
     );
   }
