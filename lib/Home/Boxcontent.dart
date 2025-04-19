@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import '../Income/incom.dart';
 
 class Boxcontent extends StatefulWidget {
-  const Boxcontent({super.key});
+  final String user_id;
+  final String username;
+
+  const Boxcontent({super.key, required this.user_id, required this.username});
+
+  // final String hh;
 
   @override
   State<Boxcontent> createState() => _BoxcontentState();
@@ -102,7 +107,10 @@ class _BoxcontentState extends State<Boxcontent> {
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const incomepage())),
+                          builder: (context) => incomepage(
+                                user_id: widget.user_id,
+                                username: widget.username,
+                              ))),
                   icon: const Icon(Icons.add_circle,
                       color: Colors.white, size: 50),
                 )

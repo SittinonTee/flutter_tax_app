@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_tax_app/Home/BalanceCard.dart';
 import 'package:flutter_tax_app/Home/Boxcontent.dart';
-import 'TopBar.dart';
+import 'package:flutter_tax_app/Login/Login.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(const MyApp());
-}
-
+// void main() {
+//   runApp(const MyApp());
+// }
+//----------------------------------------------------------------------------------------------------------------------------------------------
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key, this.user_id, this.username});
+
+  final String? user_id;
+  final String? username;
 
   @override
   Widget build(BuildContext context) {
@@ -18,44 +23,111 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Kanit',
       ),
-      home: const HomePage(),
+      home: HomePage(user_id: user_id, username: username),
     );
   }
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key, this.user_id, this.username});
+
+  final String? user_id;
+  final String? username;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
+//l;sdf;lsdfk;lsdkfkpoek;sl,df;sld,f;ls,e/.s,d/.f,el,s;d,f;se,
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-
-
-  final List<Widget> _pages = [
-    const Homepage(),
-    const ChartPage(),
-    const AddPage(),
-    const NotificationsPage(),
-    const MorePage(),
-  ];
+  List<Widget>? _pages;
 
   @override
+  void initState() {
+    super.initState();
+    _loadDataUser();
+  }
+
+  String dd = 'dddddd';
+
+  List<dynamic> datauser = [];
+  Map<String, dynamic>? _datauser;
+
+  Future<void> _loadDataUser() async {
+    try {
+      final url = Uri.parse('http://localhost:3000/Getdata/${widget.user_id}');
+
+      final res = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        print('✅ Get data success: $data');
+
+        setState(() {
+          datauser = data;
+          if (datauser.isNotEmpty) {
+            _datauser = datauser[0];
+            print(_datauser!);
+            // print(_datauser?['amount'] ?? 0);
+          }
+        });
+      } else {
+        print('❌ Error: ${res.statusCode}');
+      }
+    } catch (e) {
+      print('❌ Exception: $e');
+    }
+  }
+
+  // int amount = 0;
+
+  int _selectedIndex = 0;
+  @override
   Widget build(BuildContext context) {
+    _pages = [
+      Homepage(),
+      const ChartPage(),
+      const AddPage(),
+      const NotificationsPage(),
+      const ProfilePage(),
+    ];
+
+    if (_datauser == null) {
+      // แสดงหน้าโหลดหากข้อมูลยังไม่พร้อม
+      return Scaffold(
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Topbar(),
+              Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+
+    // โค้ด UI ปกติ
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
         child: Column(
           children: [
-            const Topbar(),
+            Topbar(),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: IndexedStack(
                   index: _selectedIndex,
-                  children: _pages,
+                  children: _pages!,
                 ),
               ),
             )
@@ -66,6 +138,157 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+  Widget Topbar() {
+    return Padding(
+      // padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: 50,
+            width: 180,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '${widget.user_id!},${widget.username!}',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ),
+          ),
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: const Icon(Icons.person, size: 40, color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget Homepage() {
+    return Column(
+      children: [
+        BalanceCard(), // ส่วน BalanceCard
+        SizedBox(
+          height: 60,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+              child: const Text(
+                "รายการ", // ข้อความ "รายการ"
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Boxcontent(
+            user_id: widget.user_id!,
+            username: widget.username!), // ส่วน Boxcontent
+      ],
+    );
+  }
+
+  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwBalanceCardwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+  Widget BalanceCard() {
+    // print('ddsd ${dd}');
+    return Container(
+      width: double.infinity,
+      height: 380,
+      padding: const EdgeInsets.all(20),
+      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // ✅ กลางแนวตั้ง
+          crossAxisAlignment: CrossAxisAlignment.center, // ✅ กลางแนวนอน
+          children: [
+            const Text(
+              'ภาษีที่ต้องจ่าย',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '${_datauser?['amount'] ?? "กำลังโหลด..."}',
+              style: TextStyle(
+                color: Color(0xFFceff6a),
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Text(
+              'คุณมีโอกาสทำเพิ่มอีก ฿ 0',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircularProgressIndicator(
+                    value: 0.5,
+                    strokeWidth: 8,
+                    backgroundColor: Colors.grey[800],
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Color(0xFFceff6a)),
+                  ),
+                ),
+                const Text(
+                  '50%',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: const Text(
+                'ได้สิทธิ์ลดหย่อนไปแล้ว',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget buildBottomNavigationBar() {
     return Container(
       height: 70,
@@ -128,41 +351,43 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+//----------------------------------------------------------------------------------------------------------------------------------------------
+// class Homepage extends StatefulWidget {
+//   const Homepage({super.key});
 
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
+//   @override
+//   State<Homepage> createState() => _HomepageState();
+// }
 
-class _HomepageState extends State<Homepage> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const BalanceCard(), // ส่วน BalanceCard
-        SizedBox(
-          height: 60,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-              child: const Text(
-                "รายการ", // ข้อความ "รายการ"
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Boxcontent(), // ส่วน Boxcontent
-      ],
-    );
-  }
-}
+// class _HomepageState extends State<Homepage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         const BalanceCard(), // ส่วน BalanceCard
+//         SizedBox(
+//           height: 60,
+//           child: Align(
+//             alignment: Alignment.centerLeft,
+//             child: Container(
+//               padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+//               child: const Text(
+//                 "รายการ", // ข้อความ "รายการ"
+//                 style: TextStyle(
+//                   fontSize: 30,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//         const Boxcontent(), // ส่วน Boxcontent
+//       ],
+//     );
+//   }
+// }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
 class ChartPage extends StatelessWidget {
   const ChartPage({super.key});
 
@@ -177,6 +402,7 @@ class ChartPage extends StatelessWidget {
   }
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
 
@@ -191,20 +417,119 @@ class NotificationsPage extends StatelessWidget {
   }
 }
 
-class MorePage extends StatelessWidget {
-  const MorePage({super.key});
+//----------------------------------------------------------------------------------------------------------------------------------------------
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "More Page",
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(20), //padding เนื้อหา
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // จัดเนื้อหาแบบแนวนอน
+          children: [
+            const SizedBox(height: 20), // กล่องให้ห่างจากข้างบน 20
+            const Text(
+              'ชื่อผู้ใช้งาน',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 10), // กล่องให้ห่างจากข้างบน 10
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'Buranasak',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            const Text(
+              'อีเมล',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'Buranasak2303@gmail.com',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            const Text(
+              'เบอร์โทร',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                '0982468157',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+            const Spacer(),
+            const SizedBox(height: 40),
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.redAccent,
+                    padding: const EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    'ออกจากระบบ',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------
 class AddPage extends StatelessWidget {
   const AddPage({super.key});
 
@@ -242,3 +567,4 @@ class AddPage extends StatelessWidget {
     );
   }
 }
+//----------------------------------------------------------------------------------------------------------------------------------------------
