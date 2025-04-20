@@ -83,12 +83,12 @@ class _HomePageState extends State<HomePage> {
           datauser = data;
           if (datauser.isNotEmpty) {
             _datauser = datauser[0];
-            print('datauserssssss ${datauser!}');
+            print('datauser ${datauser!}');
             print('datauser ${_datauser!}');
             // print(_datauser?['amount']);
 
             for (var item in datauser) {
-              print('oooo ${item[0]}');
+              print('oooo ${item['amount']}');
               totalAmount += item['amount']!;
             }
 
