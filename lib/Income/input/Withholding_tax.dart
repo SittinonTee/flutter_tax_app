@@ -3,8 +3,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/Home.dart';
+import 'package:flutter_tax_app/userdatamodel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
+
+import 'package:provider/provider.dart';
 
 class Withholding_tax extends StatefulWidget {
   Withholding_tax(
@@ -22,26 +25,44 @@ class Withholding_tax extends StatefulWidget {
 }
 
 class _Withholding_taxState extends State<Withholding_tax> {
-  Future<bool> login(
-      String userId, int income, int tax, String type, String data) async {
-    final url = Uri.parse('http://localhost:3000/login');
+  late UserModel userModel;
 
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        // 'username': username,
-        // 'password': password,
-      }),
-    );
+  @override
+  void initState() {
+    super.initState();
+    print(widget.income);
+    userModel = Provider.of<UserModel>(context, listen: false);
+  }
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print('✅ Login success: ${data['user']}');
-      return true;
-    } else {
-      final error = jsonDecode(response.body);
-      print('❌ Login failed: ${error['message']}');
+  Future<bool> addincome() async {
+    try {
+      final url = Uri.parse('http://localhost:3000/addincome');
+
+      final userModel = Provider.of<UserModel>(context, listen: false);
+
+      final res = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'user_id': int.parse(userModel.userId!),
+          'amount': widget.income,
+          'tax_withhold': int.parse(displayTax),
+          'income_type': widget.type,
+          'type_value': widget.data,
+        }),
+      );
+
+      if (res.statusCode == 200) {
+        print(res.body);
+
+        print('✅ Add income success');
+        return true;
+      } else {
+        print('❌ Failed to add income: ${res.body}');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error: $e');
       return false;
     }
   }
@@ -149,13 +170,16 @@ class _Withholding_taxState extends State<Withholding_tax> {
                                 child: InkWell(
                               onTap: displayTax.isEmpty
                                   ? null
-                                  : () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MyApp(),
-                                        ),
-                                      );
+                                  : () async {
+                                      bool success = await addincome();
+                                      if (success) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => MyApp(),
+                                          ),
+                                        );
+                                      }
                                     },
                               child: Text(
                                 "Done",

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Income/incom.dart';
+import 'package:flutter_tax_app/userdatamodel.dart';
+import 'package:provider/provider.dart';
 
 class Boxcontent extends StatefulWidget {
   final String user_id;
@@ -14,13 +16,22 @@ class Boxcontent extends StatefulWidget {
 }
 
 class _BoxcontentState extends State<Boxcontent> {
+  IncomeModel? incomeModel;
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.user_id);
+    incomeModel = Provider.of<IncomeModel>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView(
         children: [
-          _buildCategoryCard(
-              'รายได้', '฿720,000', Icons.account_balance_wallet),
+          _buildCategoryCard('รายได้', '${incomeModel?.total_amount}',
+              Icons.account_balance_wallet),
           const SizedBox(height: 30),
           _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings),
           const SizedBox(height: 30),

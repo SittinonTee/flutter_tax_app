@@ -56,6 +56,8 @@ class _LoginState extends State<Login> {
       print('Username: $username');
       print('Gmail: $gmail');
 
+      final usermodel = Provider.of<UserModel>(context, listen: false);
+      usermodel.setUser(userId, username);
       // final UserModel = Provider.of<UserModel>(context, listen: false);
       // UserModel.setUser(userId, username);
       // User_id = userId;
@@ -181,13 +183,13 @@ class _LoginState extends State<Login> {
                           formKey.currentState!.save();
 
                           bool success = await login(Username, Password);
-
+                          final userModels =
+                              Provider.of<UserModel>(context, listen: false);
+                          print(userModels.userId);
                           if (success) {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyApp(
-                                      user_id: User_id, username: Username)),
+                              MaterialPageRoute(builder: (context) => MyApp()),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(

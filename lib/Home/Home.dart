@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/Boxcontent.dart';
 import 'package:flutter_tax_app/Login/Login.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_tax_app/userdatamodel.dart';
+import 'package:provider/provider.dart';
 
 // void main() {
 //   runApp(const MyApp());
 // }
 //----------------------------------------------------------------------------------------------------------------------------------------------
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, this.user_id, this.username});
+  const MyApp({super.key});
 
-  final String? user_id;
-  final String? username;
+  // final String? user_id;
+  // final String? username;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Kanit',
       ),
-      home: HomePage(user_id: user_id, username: username),
+      home: HomePage(),
     );
   }
 }
@@ -41,22 +43,29 @@ class HomePage extends StatefulWidget {
 //l;sdf;lsdfk;lsdkfkpoek;sl,df;sld,f;ls,e/.s,d/.f,el,s;d,f;se,
 
 class _HomePageState extends State<HomePage> {
+  late UserModel userModel;
+  IncomeModel? incomeModel;
   List<Widget>? _pages;
+  num totalAmount = 0;
 
   @override
   void initState() {
     super.initState();
+
+    userModel = Provider.of<UserModel>(context, listen: false);
+    incomeModel = Provider.of<IncomeModel>(context, listen: false);
     _loadDataUser();
   }
 
-  String dd = 'dddddd';
+  // String dd = 'dddddd';
 
   List<dynamic> datauser = [];
   Map<String, dynamic>? _datauser;
 
   Future<void> _loadDataUser() async {
     try {
-      final url = Uri.parse('http://localhost:3000/Getdata/${widget.user_id}');
+      final url =
+          Uri.parse('http://localhost:3000/getdata/${userModel.userId}');
 
       final res = await http.get(
         url,
@@ -64,6 +73,9 @@ class _HomePageState extends State<HomePage> {
       );
 
       if (res.statusCode == 200) {
+        // แปลงข้อมูลที่ได้รับจาก API เป็น List<Map<String, dynamic>>
+
+        // final data = List<Map<String, dynamic>>.from(jsonDecode(res.body));
         final data = jsonDecode(res.body);
         print('✅ Get data success: $data');
 
@@ -71,8 +83,19 @@ class _HomePageState extends State<HomePage> {
           datauser = data;
           if (datauser.isNotEmpty) {
             _datauser = datauser[0];
-            print(_datauser!);
-            // print(_datauser?['amount'] ?? 0);
+            print('datauserssssss ${datauser!}');
+            print('datauser ${_datauser!}');
+            // print(_datauser?['amount']);
+
+            for (var item in datauser) {
+              print('oooo ${item[0]}');
+              totalAmount += item['amount']!;
+            }
+
+            incomeModel?.setincome(totalAmount as int?);
+            incomeModel?.setincomeData(datauser);
+
+            // print('asdasdasdasdasd     ${incomeModel?.incomeData}');
           }
         });
       } else {
@@ -96,24 +119,24 @@ class _HomePageState extends State<HomePage> {
       const ProfilePage(),
     ];
 
-    if (_datauser == null) {
-      // แสดงหน้าโหลดหากข้อมูลยังไม่พร้อม
-      return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Topbar(),
-              Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            ],
-          ),
-        ),
-      );
-    }
+    // if (_datauser == null) {
+    //   // แสดงหน้าโหลดหากข้อมูลยังไม่พร้อม
+    //   return Scaffold(
+    //     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+    //     body: SafeArea(
+    //       child: Column(
+    //         children: [
+    //           Topbar(),
+    //           Expanded(
+    //             child: Center(
+    //               child: CircularProgressIndicator(),
+    //             ),
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
     // โค้ด UI ปกติ
     return Scaffold(
@@ -157,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${widget.user_id!},${widget.username!}',
+                '${userModel.userId},${userModel.username!}',
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -179,6 +202,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget Homepage() {
     return Column(
       children: [
@@ -200,8 +224,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Boxcontent(
-            user_id: widget.user_id!,
-            username: widget.username!), // ส่วน Boxcontent
+            user_id: userModel.userId!,
+            username: userModel.username!), // ส่วน Boxcontent
       ],
     );
   }
@@ -232,7 +256,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 10),
             Text(
-              '${_datauser?['amount'] ?? "กำลังโหลด..."}',
+              "9999999999",
               style: TextStyle(
                 color: Color(0xFFceff6a),
                 fontSize: 50,
@@ -287,6 +311,11 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+  // Widget Boxcontent({required String user_id, required String username}) {
+
+  // }
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget buildBottomNavigationBar() {

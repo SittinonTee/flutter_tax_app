@@ -27,6 +27,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserModel()),
+        ChangeNotifierProvider(create: (_) => IncomeModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
