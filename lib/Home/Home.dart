@@ -439,12 +439,41 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        "Notifications Page",
+        "Notifications Page2303",
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
     );
   }
 }
+
+// class NotificationsPage extends StatelessWidget {
+//   const NotificationsPage({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.pushNamed(context, '/home');
+//             },
+//             child: const Text(
+//               'Home',
+//               style: TextStyle(
+//                 color: Colors.blue,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//       body: const Center(
+//         child: Text('Notifications Page'),
+//       ),
+//     );
+//   }
+// }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
 class ProfilePage extends StatelessWidget {
