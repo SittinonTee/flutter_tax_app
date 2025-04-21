@@ -5,10 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter_tax_app/Home/Detail.dart';
 
 class Boxcontent extends StatefulWidget {
-  final String user_id;
-  final String username;
+  // final String user_id;
+  // final String username;
 
-  const Boxcontent({super.key, required this.user_id, required this.username});
+  const Boxcontent({super.key});
 
   // final String hh;
 
@@ -22,7 +22,7 @@ class _BoxcontentState extends State<Boxcontent> {
   @override
   void initState() {
     super.initState();
-    print(widget.user_id);
+    // print(widget.user_id);
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
   }
 
@@ -130,8 +130,8 @@ class _BoxcontentState extends State<Boxcontent> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => incomepage(
-                                    user_id: widget.user_id,
-                                    username: widget.username,
+                                  // user_id: widget.user_id,
+                                  // username: widget.username,
                                   ))),
                       icon: const Icon(Icons.add_circle,
                           color: Colors.white, size: 50),

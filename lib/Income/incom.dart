@@ -4,10 +4,10 @@ import 'package:flutter_tax_app/Home/Home.dart';
 import 'package:flutter_tax_app/Income/input/inputincome.dart';
 
 class incomepage extends StatefulWidget {
-  const incomepage({super.key, required this.user_id, required this.username});
+  const incomepage({super.key});
 
-  final String user_id;
-  final String username;
+  // final String user_id;
+  // final String username;
 
   @override
   State<incomepage> createState() => _incomepageState();
@@ -34,7 +34,7 @@ class _incomepageState extends State<incomepage> {
   @override
   void initState() {
     super.initState();
-    print(widget.user_id);
+    // print(widget.user_id);
   }
 
   @override

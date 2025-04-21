@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_tax_app/Share_data/Share-data.dart';
 
 class Withholding_tax extends StatefulWidget {
   Withholding_tax(
@@ -25,26 +27,27 @@ class Withholding_tax extends StatefulWidget {
 }
 
 class _Withholding_taxState extends State<Withholding_tax> {
-  late UserModel userModel;
+  // late UserModel userModel;
 
   @override
   void initState() {
     super.initState();
     print(widget.income);
-    userModel = Provider.of<UserModel>(context, listen: false);
+    // userModel = Provider.of<UserModel>(context, listen: false);
   }
 
   Future<bool> addincome() async {
+    String? userId = await ShareDataUserid.getUserId();
     try {
       final url = Uri.parse('http://localhost:3000/addincome');
 
-      final userModel = Provider.of<UserModel>(context, listen: false);
+      // final userModel = Provider.of<UserModel>(context, listen: false);
 
       final res = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'user_id': int.parse(userModel.userId!),
+          'user_id': int.parse(userId!),
           'amount': widget.income,
           'tax_withhold': int.parse(displayTax),
           'income_type': widget.type,

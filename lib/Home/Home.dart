@@ -2,10 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/Boxcontent.dart';
+import 'package:flutter_tax_app/Home/Pagebuttombar/ProfileDetail.dart';
+import 'package:flutter_tax_app/Home/TopBar.dart';
 import 'package:flutter_tax_app/Login/Login.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_tax_app/userdatamodel.dart';
+
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_tax_app/Share_data/Share-data.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -13,9 +18,6 @@ import 'package:provider/provider.dart';
 //----------------------------------------------------------------------------------------------------------------------------------------------
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // final String? user_id;
-  // final String? username;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +34,7 @@ class MyApp extends StatelessWidget {
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, this.user_id, this.username});
-
-  final String? user_id;
-  final String? username;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -43,7 +42,6 @@ class HomePage extends StatefulWidget {
 //l;sdf;lsdfk;lsdkfkpoek;sl,df;sld,f;ls,e/.s,d/.f,el,s;d,f;se,
 
 class _HomePageState extends State<HomePage> {
-  late UserModel userModel;
   IncomeModel? incomeModel;
   List<Widget>? _pages;
   num totalAmount = 0;
@@ -52,20 +50,18 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    userModel = Provider.of<UserModel>(context, listen: false);
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
     _loadDataUser();
   }
-
-  // String dd = 'dddddd';
 
   List<dynamic> datauser = [];
   Map<String, dynamic>? _datauser;
 
   Future<void> _loadDataUser() async {
+    String? userId = await ShareDataUserid.getUserId();
+
     try {
-      final url =
-          Uri.parse('http://localhost:3000/getdata/${userModel.userId}');
+      final url = Uri.parse('http://localhost:3000/getdata/${userId!}');
 
       final res = await http.get(
         url,
@@ -83,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           datauser = data;
           if (datauser.isNotEmpty) {
             _datauser = datauser[0];
-            print('datauser ${datauser!}');
+            // print('datauser ${datauser}');
             print('datauser ${_datauser!}');
             // print(_datauser?['amount']);
 
@@ -106,8 +102,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // int amount = 0;
-
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -116,7 +110,7 @@ class _HomePageState extends State<HomePage> {
       const ChartPage(),
       const AddPage(),
       const NotificationsPage(),
-      const ProfilePage(),
+      const Profiledetail(),
     ];
 
     // if (_datauser == null) {
@@ -144,7 +138,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Topbar(),
+            const Topbar(),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -162,45 +156,45 @@ class _HomePageState extends State<HomePage> {
   }
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-  Widget Topbar() {
-    return Padding(
-      // padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            height: 50,
-            width: 180,
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '${userModel.userId},${userModel.username!}',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-            ),
-          ),
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: const Icon(Icons.person, size: 40, color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget Topbar() {
+  //   return Padding(
+  //     // padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
+  //     padding: const EdgeInsets.all(20),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Container(
+  //           height: 50,
+  //           width: 180,
+  //           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+  //           decoration: BoxDecoration(
+  //             color: Colors.black,
+  //             borderRadius: BorderRadius.circular(50),
+  //           ),
+  //           child: Align(
+  //             alignment: Alignment.centerLeft,
+  //             child: Text(
+  //               '${ShareDataUserid.getUserId()},${ShareDataUserid.getUsername()}',
+  //               style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontWeight: FontWeight.bold,
+  //                   fontSize: 20),
+  //             ),
+  //           ),
+  //         ),
+  //         Container(
+  //           width: 60,
+  //           height: 60,
+  //           decoration: BoxDecoration(
+  //             color: Colors.black,
+  //             borderRadius: BorderRadius.circular(50),
+  //           ),
+  //           child: const Icon(Icons.person, size: 40, color: Colors.white),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget Homepage() {
@@ -224,8 +218,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Boxcontent(
-            user_id: userModel.userId!,
-            username: userModel.username!), // ส่วน Boxcontent
+            // user_id: userModel.userId!,
+            // username: userModel.username!), // ส่วน Boxcontent
+            )
       ],
     );
   }
@@ -476,116 +471,116 @@ class NotificationsPage extends StatelessWidget {
 // }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+// class ProfilePage extends StatelessWidget {
+//   const ProfilePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(20), //padding เนื้อหา
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: Padding(
+//         padding: const EdgeInsets.all(20), //padding เนื้อหา
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // จัดเนื้อหาแบบแนวนอน
-          children: [
-            const SizedBox(height: 20), // กล่องให้ห่างจากข้างบน 20
-            const Text(
-              'ชื่อผู้ใช้งาน',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start, // จัดเนื้อหาแบบแนวนอน
+//           children: [
+//             const SizedBox(height: 20), // กล่องให้ห่างจากข้างบน 20
+//             const Text(
+//               'ชื่อผู้ใช้งาน',
+//               style: TextStyle(
+//                 fontSize: 16,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
 
-            const SizedBox(height: 10), // กล่องให้ห่างจากข้างบน 10
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                'Buranasak',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+//             const SizedBox(height: 10), // กล่องให้ห่างจากข้างบน 10
+//             Container(
+//               width: double.infinity,
+//               padding: const EdgeInsets.all(15),
+//               decoration: BoxDecoration(
+//                 //ใช้ปรับแต่ง Container
+//                 color: Colors.grey[200],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: const Text(
+//                 'Buranasak',
+//                 style: TextStyle(fontSize: 18),
+//               ),
+//             ),
 
-            const SizedBox(height: 20),
-            const Text(
-              'อีเมล',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+//             const SizedBox(height: 20),
+//             const Text(
+//               'อีเมล',
+//               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//             ),
 
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                'Buranasak2303@gmail.com',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+//             const SizedBox(height: 10),
+//             Container(
+//               width: double.infinity,
+//               padding: const EdgeInsets.all(15),
+//               decoration: BoxDecoration(
+//                 //ใช้ปรับแต่ง Container
+//                 color: Colors.grey[200],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: const Text(
+//                 'Buranasak2303@gmail.com',
+//                 style: TextStyle(fontSize: 18),
+//               ),
+//             ),
 
-            const SizedBox(height: 20),
-            const Text(
-              'เบอร์โทร',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+//             const SizedBox(height: 20),
+//             const Text(
+//               'เบอร์โทร',
+//               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//             ),
 
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                '0982468157',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            const Spacer(),
-            const SizedBox(height: 40),
-            Center(
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Login()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                    padding: const EdgeInsets.all(20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'ออกจากระบบ',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//             const SizedBox(height: 10),
+//             Container(
+//               width: double.infinity,
+//               padding: const EdgeInsets.all(15),
+//               decoration: BoxDecoration(
+//                 //ใช้ปรับแต่ง Container
+//                 color: Colors.grey[200],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: const Text(
+//                 '0982468157',
+//                 style: TextStyle(fontSize: 18),
+//               ),
+//             ),
+//             const Spacer(),
+//             const SizedBox(height: 40),
+//             Center(
+//               child: SizedBox(
+//                 width: double.infinity,
+//                 child: ElevatedButton(
+//                   onPressed: () {
+//                     Navigator.push(
+//                       context,
+//                       MaterialPageRoute(builder: (context) => const Login()),
+//                     );
+//                   },
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: Colors.redAccent,
+//                     padding: const EdgeInsets.all(20),
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(10),
+//                     ),
+//                   ),
+//                   child: const Text(
+//                     'ออกจากระบบ',
+//                     style: TextStyle(fontSize: 18, color: Colors.white),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
 class AddPage extends StatelessWidget {

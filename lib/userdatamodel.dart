@@ -38,6 +38,7 @@ class IncomeModel extends ChangeNotifier {
 
   void setincomeData(List<dynamic>? incomeData) {
     _incomeData = incomeData;
+    // print('_incomeData      $_incomeData');
     notifyListeners();
   }
 }
