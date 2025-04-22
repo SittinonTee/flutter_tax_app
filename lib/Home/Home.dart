@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/Boxcontent.dart';
+import 'package:flutter_tax_app/Home/Pagebuttombar/Add.dart';
+import 'package:flutter_tax_app/Home/Pagebuttombar/NotificationsPage.dart';
 import 'package:flutter_tax_app/Home/Pagebuttombar/ProfileDetail.dart';
+import 'package:flutter_tax_app/Home/Pagebuttombar/sumary.dart';
 import 'package:flutter_tax_app/Home/TopBar.dart';
 import 'package:flutter_tax_app/Login/Login.dart';
 import 'package:http/http.dart' as http;
@@ -107,9 +110,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _pages = [
       Homepage(),
-      const ChartPage(),
-      const AddPage(),
-      const NotificationsPage(),
+      const Sumary(),
+      const Add(),
+      const NotificationsPage(), //
       const Profiledetail(),
     ];
 
@@ -154,47 +157,6 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: buildBottomNavigationBar(),
     );
   }
-
-  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-  // Widget Topbar() {
-  //   return Padding(
-  //     // padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
-  //     padding: const EdgeInsets.all(20),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //       children: [
-  //         Container(
-  //           height: 50,
-  //           width: 180,
-  //           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-  //           decoration: BoxDecoration(
-  //             color: Colors.black,
-  //             borderRadius: BorderRadius.circular(50),
-  //           ),
-  //           child: Align(
-  //             alignment: Alignment.centerLeft,
-  //             child: Text(
-  //               '${ShareDataUserid.getUserId()},${ShareDataUserid.getUsername()}',
-  //               style: TextStyle(
-  //                   color: Colors.white,
-  //                   fontWeight: FontWeight.bold,
-  //                   fontSize: 20),
-  //             ),
-  //           ),
-  //         ),
-  //         Container(
-  //           width: 60,
-  //           height: 60,
-  //           decoration: BoxDecoration(
-  //             color: Colors.black,
-  //             borderRadius: BorderRadius.circular(50),
-  //           ),
-  //           child: const Icon(Icons.person, size: 40, color: Colors.white),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget Homepage() {
@@ -308,9 +270,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-  // Widget Boxcontent({required String user_id, required String username}) {
-
-  // }
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget buildBottomNavigationBar() {
@@ -375,249 +334,4 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------------------
-// class Homepage extends StatefulWidget {
-//   const Homepage({super.key});
-
-//   @override
-//   State<Homepage> createState() => _HomepageState();
-// }
-
-// class _HomepageState extends State<Homepage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         const BalanceCard(), // ส่วน BalanceCard
-//         SizedBox(
-//           height: 60,
-//           child: Align(
-//             alignment: Alignment.centerLeft,
-//             child: Container(
-//               padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-//               child: const Text(
-//                 "รายการ", // ข้อความ "รายการ"
-//                 style: TextStyle(
-//                   fontSize: 30,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//         const Boxcontent(), // ส่วน Boxcontent
-//       ],
-//     );
-//   }
-// }
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-class ChartPage extends StatelessWidget {
-  const ChartPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Chart Page",
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-class NotificationsPage extends StatelessWidget {
-  const NotificationsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        "Notifications Page2303",
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-}
-
-// class NotificationsPage extends StatelessWidget {
-//   const NotificationsPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.pushNamed(context, '/home');
-//             },
-//             child: const Text(
-//               'Home',
-//               style: TextStyle(
-//                 color: Colors.blue,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//       body: const Center(
-//         child: Text('Notifications Page'),
-//       ),
-//     );
-//   }
-// }
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-// class ProfilePage extends StatelessWidget {
-//   const ProfilePage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: Padding(
-//         padding: const EdgeInsets.all(20), //padding เนื้อหา
-
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start, // จัดเนื้อหาแบบแนวนอน
-//           children: [
-//             const SizedBox(height: 20), // กล่องให้ห่างจากข้างบน 20
-//             const Text(
-//               'ชื่อผู้ใช้งาน',
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-
-//             const SizedBox(height: 10), // กล่องให้ห่างจากข้างบน 10
-//             Container(
-//               width: double.infinity,
-//               padding: const EdgeInsets.all(15),
-//               decoration: BoxDecoration(
-//                 //ใช้ปรับแต่ง Container
-//                 color: Colors.grey[200],
-//                 borderRadius: BorderRadius.circular(10),
-//               ),
-//               child: const Text(
-//                 'Buranasak',
-//                 style: TextStyle(fontSize: 18),
-//               ),
-//             ),
-
-//             const SizedBox(height: 20),
-//             const Text(
-//               'อีเมล',
-//               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//             ),
-
-//             const SizedBox(height: 10),
-//             Container(
-//               width: double.infinity,
-//               padding: const EdgeInsets.all(15),
-//               decoration: BoxDecoration(
-//                 //ใช้ปรับแต่ง Container
-//                 color: Colors.grey[200],
-//                 borderRadius: BorderRadius.circular(10),
-//               ),
-//               child: const Text(
-//                 'Buranasak2303@gmail.com',
-//                 style: TextStyle(fontSize: 18),
-//               ),
-//             ),
-
-//             const SizedBox(height: 20),
-//             const Text(
-//               'เบอร์โทร',
-//               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//             ),
-
-//             const SizedBox(height: 10),
-//             Container(
-//               width: double.infinity,
-//               padding: const EdgeInsets.all(15),
-//               decoration: BoxDecoration(
-//                 //ใช้ปรับแต่ง Container
-//                 color: Colors.grey[200],
-//                 borderRadius: BorderRadius.circular(10),
-//               ),
-//               child: const Text(
-//                 '0982468157',
-//                 style: TextStyle(fontSize: 18),
-//               ),
-//             ),
-//             const Spacer(),
-//             const SizedBox(height: 40),
-//             Center(
-//               child: SizedBox(
-//                 width: double.infinity,
-//                 child: ElevatedButton(
-//                   onPressed: () {
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(builder: (context) => const Login()),
-//                     );
-//                   },
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: Colors.redAccent,
-//                     padding: const EdgeInsets.all(20),
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(10),
-//                     ),
-//                   ),
-//                   child: const Text(
-//                     'ออกจากระบบ',
-//                     style: TextStyle(fontSize: 18, color: Colors.white),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-class AddPage extends StatelessWidget {
-  const AddPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.add_circle, size: 100, color: Color(0xFFceff6a)),
-          const SizedBox(height: 20),
-          const Text(
-            "Add New Content",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 40),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            onPressed: () {
-              // ทำงานเมื่อกดปุ่ม
-            },
-            child: const Text(
-              "เพิ่มรายการ",
-              style: TextStyle(fontSize: 18, color: Color(0xFFceff6a)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 //----------------------------------------------------------------------------------------------------------------------------------------------
