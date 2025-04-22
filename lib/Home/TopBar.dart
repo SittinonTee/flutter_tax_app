@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_tax_app/Share_data/Share-data.dart';
 
 class Topbar extends StatefulWidget {
   const Topbar({super.key});
@@ -8,8 +10,30 @@ class Topbar extends StatefulWidget {
 }
 
 class _TopbarState extends State<Topbar> {
+  late String user_id;
+  late String username;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    user_id = (await ShareDataUserid.getUserId())!;
+    username = (await ShareDataUserid.getUsername())!;
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return CircularProgressIndicator();
+    }
     return Padding(
       // padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
       padding: const EdgeInsets.all(20),
@@ -24,10 +48,10 @@ class _TopbarState extends State<Topbar> {
               color: Colors.black,
               borderRadius: BorderRadius.circular(50),
             ),
-            child: const Align(
+            child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'User',
+                username,
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

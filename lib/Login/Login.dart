@@ -1,9 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-// import 'package:flutter_tax_app/test.dart';
+import 'package:flutter_tax_app/userdatamodel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_tax_app/Home/Home.dart';
+import 'package:provider/provider.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_tax_app/Share_data/Share-data.dart';
+
+// import 'package:flutter_tax_app/userdatamodel.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,10 +21,55 @@ class _LoginState extends State<Login> {
   bool _obscureText = true;
 
   final formKey = GlobalKey<FormState>();
-  String? Username = '';
-  String? Password = '';
+  String Username = '';
+  String Password = '';
+  String User_id = '';
 
-  List<dynamic> _users = [];
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final isLoggedIn = await ShareDataUserid.checkLogin();
+    print(isLoggedIn);
+
+    if (isLoggedIn) {
+      // String? userId = await dShareDataUseri.getUserId();
+      // String? username = await ShareDataUserid.getUsername();
+
+      // print(await ShareDataUserid.getUserId());
+      // print(await ShareDataUserid.getUsername());
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => MyApp()),
+      );
+    } else {
+      // ไปหน้า Login ได้ถ้าต้องการ
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(builder: (_) => LoginScreen()),
+      // );
+    }
+  }
+
+  Future<void> _login() async {
+    bool success = await ShareDataUserid.login(Username, Password);
+    // final userModels = Provider.of<UserModel>(context, listen: false);
+    // print(userModels.userId);
+    if (success) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyApp()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('เข้าสู่ระบบล้มเหลว')),
+      );
+    }
+  }
+
+  // final List<dynamic> _users = [];
 
   // Future<void> _fetchUsers() async {
   //   final response = await http.get(Uri.parse('VERCEL_URL/users'));
@@ -28,28 +78,45 @@ class _LoginState extends State<Login> {
   //   });
   // }
 
-  Future<bool> login(String username, String password) async {
-    final url = Uri.parse('http://localhost:3000/login');
+  // Future<bool> login(String username, String password) async {
+  //   final url = Uri.parse('http://localhost:3000/login');
 
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'username': username,
-        'password': password,
-      }),
-    );
+  //   final response = await http.post(
+  //     url,
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: jsonEncode({
+  //       'username': username,
+  //       'password': password,
+  //     }),
+  //   );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print('✅ Login success: ${data['user']}');
-      return true;
-    } else {
-      final error = jsonDecode(response.body);
-      print('❌ Login failed: ${error['message']}');
-      return false;
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     final data = jsonDecode(response.body);
+  //     print('✅ Login success: $data');
+
+  //     var user = data['user'];
+  //     String? userId = user['user_id'].toString();
+  //     String? username = user['username'];
+  //     String? gmail = user['gmail'];
+
+  //     print('User ID: $userId');
+  //     print('Username: $username');
+  //     print('Gmail: $gmail');
+
+  //     final usermodel = Provider.of<UserModel>(context, listen: false);
+  //     usermodel.setUser(userId, username);
+  //     // final UserModel = Provider.of<UserModel>(context, listen: false);
+  //     // UserModel.setUser(userId, username);
+  //     // User_id = userId;
+  //     // Username = username!;
+
+  //     return true;
+  //   } else {
+  //     final error = jsonDecode(response.body);
+  //     print('❌ Login failed: ${error['message']}');
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +174,7 @@ class _LoginState extends State<Login> {
                             }
                             return null;
                           },
-                          onSaved: (value) => {Username = value}),
+                          onSaved: (value) => {Username = value!}),
                     ),
                     const SizedBox(height: 20),
 
@@ -161,21 +228,7 @@ class _LoginState extends State<Login> {
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-
-                          bool success = await login(Username!, Password!);
-
-                          if (success) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MyApp()),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('เข้าสู่ระบบล้มเหลว')),
-                            );
-                          }
+                          _login();
                         }
                       },
                       style: ElevatedButton.styleFrom(

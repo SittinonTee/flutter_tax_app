@@ -1,21 +1,74 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tax_app/Home/Home.dart';
+import 'package:flutter_tax_app/Income/input/inputincome.dart';
 
 class incomepage extends StatefulWidget {
   const incomepage({super.key});
+
+  // final String user_id;
+  // final String username;
 
   @override
   State<incomepage> createState() => _incomepageState();
 }
 
+List<Map<String, dynamic>> incomeItems = [
+  {"title": "เงินเดือน", "value": "30,000", "icon": Icons.work},
+  {"title": "โบนัส", "value": "5,000", "icon": Icons.card_giftcard},
+  {"title": "ขายของ", "value": "10,000", "icon": Icons.store},
+  {"title": "อื่น ๆ", "value": "2,000", "icon": Icons.attach_money},
+  {"title": "อื่น ๆ", "value": "2,000", "icon": Icons.attach_money},
+  {"title": "อื่น ๆ", "value": "2,000", "icon": Icons.attach_money}
+];
+
+final Map<String, List<String>> incomeData = {
+  "งานประจำปี": ["เงินเดือนและโบนัส"],
+  "รายได้เสริม": ["ขายของออนไลน์", "รับจ้างออกแบบ"],
+  "ดอกเบี้ย": ["บัญชีออมทรัพย์", "กองทุนรวม"],
+};
+
+// int dd = 0;
+
 class _incomepageState extends State<incomepage> {
+  @override
+  void initState() {
+    super.initState();
+    // print(widget.user_id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey,
+            height: 1.0,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()));
+            },
+            child: const Text(
+              'Home',
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ),
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 50),
+            // const SizedBox(height: 50),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -49,45 +102,46 @@ class _incomepageState extends State<incomepage> {
               ),
             ),
             Container(
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 41, 59, 222)),
-                child: Column(children: [
-                  Container(
-                      // padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                    children: [
-                      Expanded(
-                          child: Incomecrad(
-                              "ddd", "ddd", Icons.account_balance_wallet)),
-                      Expanded(
-                          child: Incomecrad(
-                              "ddd", "ddd", Icons.account_balance_wallet))
-                    ],
-                  )),
-                  Container(
-                    child: Row(
+              decoration:
+                  BoxDecoration(color: const Color.fromARGB(255, 41, 59, 222)),
+              child: Column(
+                children: List.generate(
+                  (incomeItems.length / 2).ceil(),
+                  (index) {
+                    final first = incomeItems[index * 2];
+                    final second = (index * 2 + 1 < incomeItems.length)
+                        ? incomeItems[index * 2 + 1]
+                        : null;
+                    return Row(
                       children: [
                         Expanded(
-                            child: Incomecrad(
-                                "ddd", "ddd", Icons.account_balance_wallet)),
-                        Expanded(
-                            child: Incomecrad(
-                                "ddd", "ddd", Icons.account_balance_wallet))
+                          child: Incomecrad(
+                              first["title"], first["value"], first["icon"]),
+                        ),
+                        if (second != null)
+                          Expanded(
+                            child: Incomecrad(second["title"], second["value"],
+                                second["icon"]),
+                          )
+                        else
+                          const Expanded(child: SizedBox()),
                       ],
-                    ),
-                  ),
-                  Container(
-                      child: Row(
-                    children: [
-                      Expanded(
-                          child: Incomecrad(
-                              "ddd", "ddd", Icons.account_balance_wallet)),
-                      Expanded(
-                          child: Incomecrad(
-                              "ddd", "ddd", Icons.account_balance_wallet))
-                    ],
-                  ))
-                ]))
+                    );
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(color: Colors.amberAccent),
+              child: Column(
+                children: incomeData.entries.map((entry) {
+                  final type = entry.key;
+                  final dataList = entry.value;
+                  return incomecrad2(context, type, dataList);
+                }).toList(),
+              ),
+            )
           ],
         ),
       ),
@@ -151,6 +205,49 @@ class _incomepageState extends State<incomepage> {
       ),
     );
   }
-}
 
-class Incomecrad {}
+  Widget incomecrad2(BuildContext context, String type, List<String> dataList) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // หัวข้อ type
+        Container(
+          height: 30,
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Text(
+            type,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        ),
+
+        // ลูปข้อมูลแต่ละแถวของ type
+        ...dataList.map((data) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Inputincome(type: type, data: data),
+                ),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              height: 30,
+              color: CupertinoColors.systemIndigo,
+              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                data,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        }),
+
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+}
