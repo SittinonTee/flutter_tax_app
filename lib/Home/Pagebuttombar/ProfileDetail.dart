@@ -133,6 +133,28 @@ class _ProfiledetailState extends State<Profiledetail> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
+
+            const SizedBox(height: 20),
+            const Text(
+              'อายุ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                //ใช้ปรับแต่ง Container
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              // child: Text(
+              //   _datauser?['old'] ?? '',
+              //   style: TextStyle(fontSize: 18),
+              // ),
+            ),
+
             const Spacer(),
             const SizedBox(height: 40),
             Center(
