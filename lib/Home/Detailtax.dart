@@ -5,6 +5,7 @@ import 'package:flutter_tax_app/Home/Home.dart';
 import 'package:flutter_tax_app/Share_data/Share-data.dart';
 import 'package:flutter_tax_app/userdatamodel.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../Income/incom.dart';
 import 'package:flutter_tax_app/Login/Login.dart';
@@ -28,6 +29,7 @@ class _DetailertaxState extends State<Detailertax> {
   @override
   void initState() {
     super.initState();
+    final formatter = NumberFormat('#,###');
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
 
     incomeData = List<Map<String, dynamic>>.from(incomeModel?.incomeData ?? []);
@@ -223,6 +225,7 @@ class _DetailertaxState extends State<Detailertax> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         shape: RoundedRectangleBorder( side: const BorderSide(color: Colors.black, width: 1),),
@@ -342,9 +345,8 @@ class _DetailertaxState extends State<Detailertax> {
                 color: Color(0xFFceff6a)),
           ),
         ])
-        );
-        
-  }
+    );    
+}
 
 
   Widget paymentCard({

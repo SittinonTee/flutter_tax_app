@@ -158,11 +158,9 @@ class _HomePageState extends State<HomePage> {
 // cal-----------------------------------------------------------------------
 
   Future<void> calculateTax() async {
-
     num totalAmount = incomeModel?.total_amount ?? 0;
     num totalTax = incomeModel?.total_tax ?? 0;
     num totalTaxWithhold = incomeModel?.total_tax_withhold ?? 0;
-
 
     num expense = totalAmount * 0.5;
     if (expense > 100000) {
@@ -412,9 +410,7 @@ class _HomePageState extends State<HomePage> {
           size: 30,
         ),
         onPressed: () {
-          setState(() {
-            _selectedIndex = 2; // ตั้งค่าให้เป็นหน้า AddPage
-          });
+          showEditDialog(context); // เรียก dialog เลย
         },
       ),
     );

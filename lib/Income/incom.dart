@@ -46,7 +46,7 @@ class _incomepageState extends State<incomepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.black, width: 1),),
+        // shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.black, width: 1),),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         foregroundColor: Colors.black,
         elevation: 0,
@@ -72,7 +72,7 @@ class _incomepageState extends State<incomepage> {
               padding: const EdgeInsets.all(0),
               child: Container(
                 width: double.infinity,
-                color: const Color.fromARGB(255, 171, 255, 119),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 padding: const EdgeInsets.all(20),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -101,7 +101,6 @@ class _incomepageState extends State<incomepage> {
               ),
             ),
 
-            Divider(height: 0),
 
             Container(
               decoration: BoxDecoration(
@@ -187,7 +186,7 @@ class _incomepageState extends State<incomepage> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               height: 40,
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 171, 255, 119),
+                color: const Color(0xFFceff6a),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.black, width: 2),
               ),
@@ -218,13 +217,13 @@ class _incomepageState extends State<incomepage> {
         Container(
           // height: 30,
           width: double.infinity,
-          color: const Color.fromARGB(255, 171, 255, 119),
+          color: const Color.fromARGB(199, 146, 146, 146),
           padding: const EdgeInsets.all(10),
           child: Text(
             type,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 20,
+              fontSize: 16,
             ),
           ),
         ),
@@ -242,13 +241,13 @@ class _incomepageState extends State<incomepage> {
             },
             child: Container(
               width: double.infinity,
-              color: const Color.fromARGB(255, 0, 0, 0),
+              color: const Color.fromARGB(255, 255, 255, 255),
               padding: const EdgeInsets.fromLTRB(30, 5, 5, 5),
               alignment: Alignment.centerLeft,
               child: Text(
                 data,
                 style:
-                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                    const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               ),
             ),
           );

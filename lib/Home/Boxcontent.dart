@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/%C2%A0Tax/Tax.dart';
 import 'package:flutter_tax_app/Home/Detailtax.dart';
@@ -6,6 +7,8 @@ import '../Income/incom.dart';
 import 'package:flutter_tax_app/userdatamodel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_tax_app/Home/Detailincome.dart';
+import 'package:flutter_tax_app/Home/Pagebuttombar/Sumary.dart';
+
 
 class Boxcontent extends StatefulWidget {
   // final String user_id;
@@ -44,7 +47,7 @@ class _BoxcontentState extends State<Boxcontent> {
     } else if (Pagenum == "3") {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => incomepage()),
+        MaterialPageRoute(builder: (context) => Sumary()),
       );
     }
   }
@@ -62,10 +65,10 @@ class _BoxcontentState extends State<Boxcontent> {
         MaterialPageRoute(builder: (context) => Detailertax()),
       );
     } else if (Pagenum == "3") {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => incomepage()),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Sumary()),
+      );
     }
   }
 

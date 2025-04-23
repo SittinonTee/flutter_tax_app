@@ -116,47 +116,97 @@ class _DetailerState extends State<Detailer> {
     final taxController = TextEditingController(text: currentTax);
 
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(currentTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: incomeController,
-                decoration: InputDecoration(labelText: "รายได้"),
-                keyboardType: TextInputType.number,
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Text(
+        currentTitle,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: incomeController,
+            decoration: InputDecoration(
+              labelText: "รายได้",
+              labelStyle: TextStyle(color: const Color.fromARGB(255, 0, 0, 0),fontWeight: FontWeight.bold),
+              filled: true,
+              fillColor: Color.fromARGB(228, 199, 199, 199),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
               ),
-              TextField(
-                controller: taxController,
-                decoration: InputDecoration(labelText: "ภาษีหัก ณ ที่จ่าย"),
-                keyboardType: TextInputType.number,
-              ),
-            ],
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            ),
+            keyboardType: TextInputType.number,
+            style: TextStyle(fontSize: 16),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("ยกเลิก"),
+          SizedBox(height: 10),
+          TextField(
+            controller: taxController,
+            decoration: InputDecoration(
+              labelText: "ภาษีหัก ณ ที่จ่าย",
+              labelStyle: TextStyle(color: const Color.fromARGB(255, 0, 0, 0),fontWeight: FontWeight.bold),
+              filled: true,
+              fillColor: Color.fromARGB(228, 199, 199, 199),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             ),
-            TextButton(
-              onPressed: () {
-                // เก็บข้อมูลที่แก้ไขแล้ว
-                final newIncome = incomeController.text;
-                final newTax = taxController.text;
+            keyboardType: TextInputType.number,
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+      actionsPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      actions: [
+        Padding(padding: EdgeInsets.all(20)),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          style: TextButton.styleFrom(
+            foregroundColor: Colors.redAccent,
+            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          child: Text("ยกเลิก"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            final newIncome = incomeController.text;
+            final newTax = taxController.text;
 
-                print(newTax + newIncome + 'ddd ' + income_id);
-                updateincomeData(newIncome, newTax, income_id);
+            print(newTax + newIncome + 'ddd ' + income_id);
+            updateincomeData(newIncome, newTax, income_id);
 
-                Navigator.pop(context);
-              },
-              child: Text("บันทึก"),
+            Navigator.pop(context);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blueAccent,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-          ],
-        );
-      },
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          child: Text("บันทึก"),
+        ),
+      ],
     );
+  },
+);
+
   }
 
   Future<void> updateincomeData(
@@ -298,7 +348,7 @@ class _DetailerState extends State<Detailer> {
           Divider(height: 24), // ขีดเส้น
 
           Text(
-            value,
+            "฿$value",
             style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

@@ -184,7 +184,7 @@ class _Withholding_taxState extends State<Withholding_tax> {
               child: const Text(
                 'Home',
                 style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                    TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
               ),
             )
           ],
@@ -199,7 +199,7 @@ class _Withholding_taxState extends State<Withholding_tax> {
                 flex: 6,
                 child: Container(
                   width: double.infinity,
-                  color: Colors.blueAccent,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,20 +211,43 @@ class _Withholding_taxState extends State<Withholding_tax> {
                               Text(
                                 "รายได้",
                                 style: TextStyle(
-                                  fontSize: 24,
-                                  color: Colors.white,
+                                  fontSize: 30,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text("(ก่อนถูกหักภาษี)"),
-                              Text(displayTax),
-                              Text("ต่อปี"),
+                              Text(
+                                "(ก่อนถูกหักภาษี)",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Text(
+                                "฿$displayTax",
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "ต่อปี",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Container(
                           width: double.infinity,
-                          color: Colors.deepOrange,
+                          color: const Color.fromARGB(255, 255, 255, 255),
                           margin: EdgeInsets.all(20),
                           child: Container(
                             padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -283,33 +306,54 @@ class _Withholding_taxState extends State<Withholding_tax> {
                           itemBuilder: (context, index) {
                             if (index < 9) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                                 onPressed: () =>
                                     onNumberPressed((index + 1).toString()),
                                 child: Text(
                                   (index + 1).toString(),
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                               );
                             } else if (index == 9) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                                 onPressed: onACPressed,
                                 child: Text(
                                   "AC",
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                               );
                             } else if (index == 10) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                                 onPressed: () => onNumberPressed("0"),
                                 child: Text(
                                   "0",
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                               );
                             } else if (index == 11) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 61, 170, 212),
+                                ),
                                 onPressed: onDeletePressed,
-                                child: Icon(Icons.backspace, size: 40),
+                                child: Icon(Icons.backspace,
+                                    size: 30,
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                               );
                             }
                             return null;

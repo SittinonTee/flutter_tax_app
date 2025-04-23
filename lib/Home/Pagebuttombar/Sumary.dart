@@ -51,8 +51,8 @@ class _SumaryState extends State<Sumary> {
 
 Widget Boxsumary(String title, String value) {
   return Container(
-      padding: EdgeInsets.all(40),
-      margin: EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 0, 0, 0),
         borderRadius: BorderRadius.circular(20),
@@ -74,7 +74,7 @@ Widget Boxsumary(String title, String value) {
               color: Color(0xFFceff6a)),
         ),
 
-        Divider(height: 24), // ขีดเส้น
+        Divider(height: 20), // ขีดเส้น
 
         Text(
           title,
@@ -96,8 +96,8 @@ Widget Boxcontenter(
     required String value3,
     required String value4}) {
   return Container(
-    padding: EdgeInsets.all(20),
-    margin: EdgeInsets.all(20),
+    padding: EdgeInsets.all(30),
+    margin: EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: const Color.fromARGB(255, 255, 255, 255),
       borderRadius: BorderRadius.circular(20),
