@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/userdatamodel.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:flutter_tax_app/Home/Home.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_tax_app/Share_data/Share-data.dart';
+import 'package:flutter_tax_app/Signup/Signup.dart';
 
 // import 'package:flutter_tax_app/userdatamodel.dart';
 
@@ -130,13 +132,12 @@ class _LoginState extends State<Login> {
               flex: 4,
               child: Container(
                 width: double.infinity,
-                color: Colors.black,
-                padding: EdgeInsets.all(20),
-                child: Center(
-                  child: Container(
-                    decoration: BoxDecoration(color: Colors.blue),
-                  ),
-                ),
+                color: const Color.fromARGB(255, 255, 255, 255),
+                    child: Image.asset(
+                      'assets/images/tax2.jpeg',
+                      width: 500,
+                      fit: BoxFit.cover,
+                    ),
               ),
             ),
             Expanded(
@@ -150,75 +151,81 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 20),
 
                     // Username Field
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: TextFormField(
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.person),
-                            labelText: "Username",
-                            filled: true,
-                            fillColor: const Color.fromARGB(255, 230, 230, 230),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "กรอกชื่อด้วย";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) => {Username = value!}),
-                    ),
-                    const SizedBox(height: 20),
+                    // Container(
+                    //   height: 50,
+                    //   width: double.infinity,
+                    // decoration: BoxDecoration(
+                    //   color: Colors.black,
+                    //   borderRadius: BorderRadius.circular(50),
+                    // ),
 
-                    // Password Field
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: TextFormField(
-                        obscureText: _obscureText,
+                    TextFormField(
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
-                          labelText: "Password",
+                          prefixIcon: const Icon(Icons.person),
+                          labelText: "Username",
+                          labelStyle: TextStyle(color: Colors.black),
                           filled: true,
                           fillColor: const Color.fromARGB(255, 230, 230, 230),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(50),
                             borderSide: BorderSide.none,
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
+                          errorStyle: TextStyle(
+                            color: const Color.fromARGB(
+                                255, 252, 3, 3), // เปลี่ยนสีข้อความแจ้งเตือน
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "กรอกmailด้วย";
+                            return "กรอกชื่อด้วย";
                           }
                           return null;
                         },
-                        onSaved: (value) => {Password = value!},
+                        onSaved: (value) => {Username = value!}),
+
+                    const SizedBox(height: 40),
+
+                    // Password Field
+
+                    TextFormField(
+                      obscureText: _obscureText,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.lock),
+                        labelText: "Password",
+                        labelStyle: TextStyle(color: Colors.black),
+                        filled: true,
+                        fillColor: const Color.fromARGB(255, 230, 230, 230),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                          borderSide: BorderSide.none,
+                        ),
+                        errorStyle: TextStyle(
+                          color: const Color.fromARGB(
+                              255, 255, 0, 0), // เปลี่ยนสีข้อความแจ้งเตือน
+                          fontWeight: FontWeight.bold,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "กรอกmailด้วย";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) => {Password = value!},
                     ),
 
                     const SizedBox(height: 30),
@@ -243,9 +250,38 @@ class _LoginState extends State<Login> {
                       ),
                       child: const Text(
                         "Login",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.black87),
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: "Don't have an account? ",
+                        style: TextStyle(color: Colors.black87),
+                        children: [
+                          TextSpan(
+                            text: "   Signup",
+                            style: TextStyle(
+                              color:
+                                  Color.fromARGB(255, 8, 156, 241), // สีไฮไลต์
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // เปลี่ยนไปหน้าสมัครสมาชิก
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUpPage()),
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

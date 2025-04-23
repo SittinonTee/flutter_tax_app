@@ -170,9 +170,7 @@ class _Withholding_taxState extends State<Withholding_tax> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                onPressed:
-                () {
+              onPressed: () {{
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -192,7 +190,6 @@ class _Withholding_taxState extends State<Withholding_tax> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          color: Colors.amberAccent,
           child: Column(
             children: [
               Expanded(
@@ -209,7 +206,7 @@ class _Withholding_taxState extends State<Withholding_tax> {
                           child: Column(
                             children: [
                               Text(
-                                "รายได้",
+                                "ภาษีหัก ณ ที่จ่าย",
                                 style: TextStyle(
                                   fontSize: 30,
                                   color: const Color.fromARGB(255, 0, 0, 0),

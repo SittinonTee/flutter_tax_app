@@ -151,7 +151,7 @@ class TaxpageState extends State<Taxpage> {
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 width: double.infinity,
-                color: const Color.fromARGB(255, 104, 26, 26),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 padding: const EdgeInsets.all(20),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -159,19 +159,19 @@ class TaxpageState extends State<Taxpage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        "รายได้",
+                        "ค่าลดหย่อนภาษี",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                       SizedBox(height: 8),
                       Text(
-                        "รายได้ต่อปีของคุณ",
+                        "ค่าลดหย่อนภาษีต่อปีของคุณ",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                     ],
@@ -180,8 +180,8 @@ class TaxpageState extends State<Taxpage> {
               ),
             ),
             Container(
-              decoration:
-                  BoxDecoration(color: const Color.fromARGB(255, 41, 59, 222)),
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255)),
               child: Column(
                 children: List.generate(
                   (taxItems.length / 2).ceil(),
@@ -212,7 +212,9 @@ class TaxpageState extends State<Taxpage> {
             SizedBox(height: 20),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(color: Colors.amberAccent),
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                ),
                 child: groupedtaxdata.isEmpty
                     ? Center(child: CircularProgressIndicator())
                     : SingleChildScrollView(
@@ -280,7 +282,7 @@ class TaxpageState extends State<Taxpage> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 height: 40,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 171, 255, 119),
+                  color: const Color.fromARGB(255, 170, 222, 112),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Colors.black, width: 2),
                 ),
@@ -337,13 +339,13 @@ class TaxpageState extends State<Taxpage> {
             child: Container(
               width: double.infinity,
               height: 30,
-              color: CupertinoColors.systemIndigo,
+              color: const Color.fromARGB(255, 255, 255, 255),
               padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
               alignment: Alignment.centerLeft,
               child: Text(
                 data['name'],
                 // "${data['name']} (สูงสุด ${data['maxAmount']} บาท)",
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               ),
             ),
           );

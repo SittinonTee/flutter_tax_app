@@ -118,23 +118,48 @@ class _DetailertaxState extends State<Detailertax> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           title: Text(currentTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: taxController,
-                decoration: InputDecoration(labelText: "ลดหย่อน"),
                 keyboardType: TextInputType.number,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+                decoration: InputDecoration(
+                  labelText: "ลดหย่อน",
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.grey[800],
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: Icon(Icons.remove_circle_outline),
+                ),
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("ยกเลิก"),
+              child: Text(
+                "ยกเลิก",
+                style: TextStyle(color: Colors.redAccent),
+              ),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 // final newIncome = incomeController.text;
                 final newTax = taxController.text;
@@ -144,6 +169,12 @@ class _DetailertaxState extends State<Detailertax> {
 
                 Navigator.pop(context);
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFceff6a),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               child: Text("บันทึก"),
             ),
           ],
@@ -180,10 +211,16 @@ class _DetailertaxState extends State<Detailertax> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black, width: 1),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey,
+            height: 1.0,
+          ),
         ),
-        backgroundColor: Color(0xFFceff6a),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -197,7 +234,7 @@ class _DetailertaxState extends State<Detailertax> {
         ),
         title: Align(
           alignment: Alignment.centerRight,
-          child: Text("Tax"),
+          child: Text("Tax",style: TextStyle(fontWeight: FontWeight.bold),),
         ),
         centerTitle: false,
       ),

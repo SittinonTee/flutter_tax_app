@@ -57,10 +57,22 @@ class _incomepageState extends State<incomepage> {
             height: 1.0,
           ),
         ),
-        title: Align(
-          alignment: Alignment.centerRight,
-          child: Text("Home"),
-        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyApp(),
+                ),
+              );
+            },
+            child: const Text(
+              'Home',
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
         centerTitle: false,
       ),
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -100,7 +112,6 @@ class _incomepageState extends State<incomepage> {
                 ),
               ),
             ),
-
 
             Container(
               decoration: BoxDecoration(
@@ -164,7 +175,7 @@ class _incomepageState extends State<incomepage> {
             padding: const EdgeInsets.all(15),
             height: 100,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 0, 0, 0),
+              color: const Color.fromARGB(255, 69, 69, 69),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: const Color.fromARGB(255, 0, 0, 0).withOpacity(1),
@@ -246,8 +257,7 @@ class _incomepageState extends State<incomepage> {
               alignment: Alignment.centerLeft,
               child: Text(
                 data,
-                style:
-                    const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               ),
             ),
           );

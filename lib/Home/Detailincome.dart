@@ -119,38 +119,84 @@ class _DetailerState extends State<Detailer> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(currentTitle),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            currentTitle,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: incomeController,
-                decoration: InputDecoration(labelText: "รายได้"),
+                decoration: InputDecoration(
+                  labelText: "Income",
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold, // ตัวหนา
+                    fontSize: 20,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: Icon(Icons.attach_money),
+                ),
                 keyboardType: TextInputType.number,
               ),
+
+              SizedBox(height: 12),
+
               TextField(
                 controller: taxController,
-                decoration: InputDecoration(labelText: "ภาษีหัก ณ ที่จ่าย"),
+                decoration: InputDecoration(
+                  labelText: "ภาษีหัก ณ ที่จ่าย",
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold, // ตัวหนา
+                    fontSize: 20,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: Icon(Icons.money_off),
+                ),
                 keyboardType: TextInputType.number,
               ),
             ],
           ),
+          actionsPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("ยกเลิก"),
+              child: Text(
+                "ยกเลิก",
+                style: TextStyle(color: Colors.redAccent),
+              ),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
-                // เก็บข้อมูลที่แก้ไขแล้ว
                 final newIncome = incomeController.text;
                 final newTax = taxController.text;
 
-                print(newTax + newIncome + 'ddd ' + income_id);
+                print('$newTax $newIncome ddd $income_id');
                 updateincomeData(newIncome, newTax, income_id);
-
                 Navigator.pop(context);
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFceff6a),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               child: Text("บันทึก"),
             ),
           ],
@@ -189,10 +235,16 @@ class _DetailerState extends State<Detailer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black, width: 1),
-        ),
-        backgroundColor: Color(0xFFceff6a),
+        backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              color: Colors.grey,
+              height: 1.0,
+            ),
+          ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -206,7 +258,7 @@ class _DetailerState extends State<Detailer> {
         ),
         title: Align(
           alignment: Alignment.centerRight,
-          child: Text("Detailer"),
+          child: Text("Income",style: TextStyle(fontWeight: FontWeight.bold),),
         ),
         centerTitle: false,
       ),

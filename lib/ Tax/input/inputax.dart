@@ -91,7 +91,6 @@ class _InputTaxState extends State<InputTax> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final type = widget.type;
@@ -141,16 +140,13 @@ class _InputTaxState extends State<InputTax> {
           ],
         ),
         body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.amberAccent,
           child: Column(
             children: [
               Expanded(
                 flex: 6,
                 child: Container(
                   width: double.infinity,
-                  color: Colors.blueAccent,
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,19 +159,35 @@ class _InputTaxState extends State<InputTax> {
                                 "จำนวนเงิน",
                                 style: TextStyle(
                                   fontSize: 24,
-                                  color: Colors.white,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              // Text("(ก่อนถูกหักภาษี)"),
-                              Text(displayText),
-                              Text("ต่อปี"),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Text(
+                                "฿$displayText",
+                                style: TextStyle(
+                                  fontSize: 36,
+                                  color: const Color.fromARGB(255, 0, 0, 0),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "ต่อปี",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Container(
                           width: double.infinity,
-                          color: Colors.deepOrange,
                           margin: EdgeInsets.all(20),
                           child: Column(
                             children: [
@@ -183,15 +195,17 @@ class _InputTaxState extends State<InputTax> {
                                 child: Text(
                                   "จำนวนเงินต้องไม่เกิน $formattedAmount บาท",
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
+                                      fontSize: 20,
+                                      color:
+                                          const Color.fromARGB(255, 255, 0, 0)),
                                 ),
                               ),
                               Container(
                                 padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
                                     color: const Color.fromARGB(
                                         255, 170, 222, 112),
+                                    borderRadius: BorderRadius.circular(50),
                                     border: Border.all(
                                         color: Colors.black, width: 2)),
                                 child: Center(
@@ -204,12 +218,48 @@ class _InputTaxState extends State<InputTax> {
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
-                                                  title: Text("Warning"),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  backgroundColor: Colors.white,
+                                                  title: Text(
+                                                    "⚠️ คำเตือน",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20,
+                                                      color: Colors.redAccent,
+                                                    ),
+                                                  ),
                                                   content: Text(
-                                                      "จำนวนต้องไม่เกิน $formattedAmount บาท"),
+                                                    "จำนวนต้องไม่เกิน $formattedAmount บาท",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[800],
+                                                    ),
+                                                  ),
                                                   actions: [
                                                     TextButton(
-                                                      child: Text("OK"),
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        foregroundColor:
+                                                            Colors.white,
+                                                        backgroundColor:
+                                                            Colors.redAccent,
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 20,
+                                                                vertical: 10),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                        ),
+                                                      ),
+                                                      child: Text("ตกลง"),
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop();
@@ -269,33 +319,54 @@ class _InputTaxState extends State<InputTax> {
                           itemBuilder: (context, index) {
                             if (index < 9) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                                 onPressed: () =>
                                     onNumberPressed((index + 1).toString()),
                                 child: Text(
                                   (index + 1).toString(),
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                               );
                             } else if (index == 9) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                                 onPressed: onACPressed,
                                 child: Text(
                                   "AC",
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                               );
                             } else if (index == 10) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
                                 onPressed: () => onNumberPressed("0"),
                                 child: Text(
                                   "0",
-                                  style: TextStyle(fontSize: 40),
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                               );
                             } else if (index == 11) {
                               return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 61, 170, 212),
+                                ),
                                 onPressed: onDeletePressed,
-                                child: Icon(Icons.backspace, size: 40),
+                                child: Icon(Icons.backspace,
+                                    size: 30,
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                               );
                             }
                             return null;
