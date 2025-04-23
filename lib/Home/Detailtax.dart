@@ -22,9 +22,9 @@ class _DetailertaxState extends State<Detailertax> {
   Map<String, dynamic>? _datatax;
   num totalAmount = 0;
   num totaltax = 0;
-  num totaltaxwithhold = 0;
+  // num totaltaxwithhold = 0;
   IncomeModel? incomeModel;
-  List<Map<String, dynamic>> incomeData = [];
+  List<Map<String, dynamic>> taxData = [];
 
   @override
   void initState() {
@@ -32,83 +32,43 @@ class _DetailertaxState extends State<Detailertax> {
     final formatter = NumberFormat('#,###');
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
 
-    incomeData = List<Map<String, dynamic>>.from(incomeModel?.incomeData ?? []);
+    taxData = List<Map<String, dynamic>>.from(incomeModel?.incomeData ?? []);
     // print(incomeData);
-    _loadincome();
+    // _loadincome();
+
+    _loadtax();
   }
 
-  Future<void> deleteItem(int index, String income_id) async {
+  Future<void> deleteItem(int index, String tax_id) async {
     String? userId = await ShareDataUserid.getUserId();
     try {
-      final url = Uri.parse('http://localhost:3000/deleteincome/${userId!}');
+      final url = Uri.parse('http://localhost:3000/deletetax/${userId!}');
 
       final res = await http.delete(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'income_id': income_id,
+          'tax_id': tax_id,
         }),
       );
 
       if (res.statusCode == 200) {
-        final deletedItem = incomeData[index];
-        final amountToRemove =
-            num.parse(deletedItem['amount']?.toString() ?? '0');
-        final taxWithholdToRemove =
-            num.parse(deletedItem['tax_withhold']?.toString() ?? '0');
-        await _loadincome();
-
+        final deletedItem = taxData[index];
+        final taxToRemove = num.parse(deletedItem['tax']?.toString() ?? '0');
+        // await _loadincome();
+        await _loadtax();
         setState(() {
-          incomeData.removeAt(index);
+          taxData.removeAt(index);
+          totaltax -= taxToRemove;
 
-          totalAmount -= amountToRemove;
-          totaltaxwithhold -= taxWithholdToRemove;
-
-          incomeModel?.setincome(totalAmount.toInt());
-          incomeModel?.settax_withhold(totaltaxwithhold.toInt());
-          incomeModel?.setincomeData(incomeData);
+          incomeModel?.settax(totaltax.toInt());
+          // incomeModel?.setincome(totalAmount.toInt());
+          // // incomeModel?.settax_withhold(totaltaxwithhold.toInt());
+          // incomeModel?.setincomeData(taxData);
         });
       }
     } catch (e) {
       print('Error: $e');
-    }
-  }
-
-  Future<void> _loadincome() async {
-    String? userId = await ShareDataUserid.getUserId();
-
-    try {
-      final url = Uri.parse('http://localhost:3000/getuserincome/${userId!}');
-
-      final res = await http.get(
-        url,
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (res.statusCode == 200) {
-        final data = jsonDecode(res.body);
-        setState(() {
-          datatax = data;
-          if (datatax.isNotEmpty) {
-            _datatax = datatax[0];
-
-            totalAmount = 0;
-            for (var item in datatax) {
-              totalAmount += item['amount']!;
-              totaltaxwithhold += item['tax_withhold']!;
-            }
-
-            // incomeModel?.setincome(totalAmount as int?);
-            // incomeModel?.setincomeData(dataincome);
-            // incomeModel?.settax_withhold(totaltaxwithhold as int?);
-            // incomeData = List<Map<String, dynamic>>.from(dataincome);
-          }
-        });
-      } else {
-        print('Error: ${res.statusCode}');
-      }
-    } catch (e) {
-      print('Exception: $e');
     }
   }
 
@@ -125,19 +85,20 @@ class _DetailertaxState extends State<Detailertax> {
 
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
-        // print('Get data success: $data');
 
         setState(() {
           datatax = data;
+          print(datatax);
           if (datatax.isNotEmpty) {
             _datatax = datatax[0];
-
+            totaltax = 0;
             for (var item in datatax) {
               totaltax += item['tax']!;
             }
 
             incomeModel?.settax(totaltax as int?);
             incomeModel?.settaxData(datatax);
+            taxData = List<Map<String, dynamic>>.from(datatax);
           }
         });
       } else {
@@ -149,8 +110,8 @@ class _DetailertaxState extends State<Detailertax> {
   }
 
   void showEditDialog(BuildContext context, String currentTitle,
-      String currentIncome, String currentTax, String income_id) {
-    final incomeController = TextEditingController(text: currentIncome);
+      String currentTax, String tax_id) {
+    // final incomeController = TextEditingController(text: currentTax);
     final taxController = TextEditingController(text: currentTax);
 
     showDialog(
@@ -162,13 +123,8 @@ class _DetailertaxState extends State<Detailertax> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: incomeController,
-                decoration: InputDecoration(labelText: "รายได้"),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
                 controller: taxController,
-                decoration: InputDecoration(labelText: "ภาษีหัก ณ ที่จ่าย"),
+                decoration: InputDecoration(labelText: "ลดหย่อน"),
                 keyboardType: TextInputType.number,
               ),
             ],
@@ -180,12 +136,11 @@ class _DetailertaxState extends State<Detailertax> {
             ),
             TextButton(
               onPressed: () {
-                // เก็บข้อมูลที่แก้ไขแล้ว
-                final newIncome = incomeController.text;
+                // final newIncome = incomeController.text;
                 final newTax = taxController.text;
 
-                print(newTax + newIncome + 'ddd ' + income_id);
-                updateincomeData(newIncome, newTax, income_id);
+                // print(newTax + newIncome + 'ddd ' + tax_id);
+                updatetaxData(newTax, tax_id);
 
                 Navigator.pop(context);
               },
@@ -197,24 +152,22 @@ class _DetailertaxState extends State<Detailertax> {
     );
   }
 
-  Future<void> updateincomeData(
-      String income, String tax, String income_id) async {
+  Future<void> updatetaxData(String tax, String tax_id) async {
     final url =
-        Uri.parse('http://localhost:3000/updateincome/${int.parse(income_id)}');
+        Uri.parse('http://localhost:3000/updatetax/${int.parse(tax_id)}');
 
     try {
       final res = await http.put(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'amount': income,
-          'tax_withhold': tax,
+          'tax': tax,
         }),
       );
 
       if (res.statusCode == 200) {
         print("Income updated successfully");
-        await _loadincome();
+        await _loadtax();
       } else {
         print("Failed to update income: ${res.statusCode}");
       }
@@ -225,10 +178,11 @@ class _DetailertaxState extends State<Detailertax> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
-        shape: RoundedRectangleBorder( side: const BorderSide(color: Colors.black, width: 1),),
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.black, width: 1),
+        ),
         backgroundColor: Color(0xFFceff6a),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -255,10 +209,11 @@ class _DetailertaxState extends State<Detailertax> {
             Expanded(
               child: Column(
                 children: [
-                  SizedBox(height: 20,),
-                  Boxbalance(
-                      "ภาษีที่ต้องจ่ายประจำปี", totalAmount.toString() ?? "0"),
-                  incomeData.isEmpty
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Boxbalance("ลดหย่อนไปแล้ว", totaltax.toString() ?? "0"),
+                  taxData.isEmpty
                       ? Center(
                           child: Center(
                           child: Container(
@@ -267,31 +222,28 @@ class _DetailertaxState extends State<Detailertax> {
                         ))
                       : Expanded(
                           child: ListView.builder(
-                            itemCount: incomeData.length,
+                            itemCount: taxData.length,
                             itemBuilder: (context, index) {
-                              final item = incomeData[index];
+                              final item = taxData[index];
                               return paymentCard(
                                 title: item['type_value']?.toString() ??
                                     'ไม่มีชื่อ',
-                                income: '฿${item['amount'] ?? 0}',
-                                tax: '฿${item['tax_withhold'] ?? 0}',
+                                tax: '฿${item['tax'] ?? 0}',
                                 onDelete: () {
-                                  if (item['income_id'] != null) {
+                                  if (item['tax_id'] != null) {
                                     deleteItem(
-                                        index, item['income_id'].toString());
+                                        index, item['tax_id'].toString());
                                   } else {
-                                    print("income_id is null");
+                                    print("tax_id is null");
                                   }
                                 },
-                                onDetail: () {},
                                 onEdit: () {
                                   showEditDialog(
                                       context,
                                       item['type_value']?.toString() ??
                                           'แก้ไขข้อมูล',
-                                      '${item['amount'] ?? 0}',
-                                      '${item['tax_withhold'] ?? 0}',
-                                      item['income_id'].toString());
+                                      '${item['tax'] ?? 0}',
+                                      item['tax_id'].toString());
                                 },
                               );
                             },
@@ -301,7 +253,7 @@ class _DetailertaxState extends State<Detailertax> {
               ),
             ),
             const SizedBox(height: 16),
-            btnincome(context, 'รายได้ ก้อนใหม่'),
+            btnincome(context, 'ลดหย่อน ก้อนใหม่'),
             const SizedBox(height: 16),
           ],
         ),
@@ -344,37 +296,34 @@ class _DetailertaxState extends State<Detailertax> {
                 fontWeight: FontWeight.bold,
                 color: Color(0xFFceff6a)),
           ),
-        ])
-    );    
-}
-
+        ]));
+  }
 
   Widget paymentCard({
     required String title,
-    required String income,
     required String tax,
     required VoidCallback onDelete,
-    required VoidCallback onDetail,
-    required VoidCallback onEdit, // Added new onEdit callback
+    required VoidCallback onEdit,
   }) {
     return Container(
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
-      color: const Color.fromARGB(255, 255, 255, 255),
-      borderRadius: BorderRadius.circular(20),
-      border: Border.all(
-        color: const Color.fromARGB(55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
-        width: 2,
+        color: const Color.fromARGB(255, 255, 255, 255),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: const Color.fromARGB(
+              55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
+          width: 2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.1),
-          blurRadius: 6,
-          offset: const Offset(0, 4),
-        )
-      ],
-    ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -395,27 +344,19 @@ class _DetailertaxState extends State<Detailertax> {
           ),
           SizedBox(height: 4),
           Text(
-            income,
+            tax,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("รายได้", style: TextStyle(fontSize: 14)),
-              Text(income, style: TextStyle(fontSize: 14)),
-            ],
-          ),
-          Divider(height: 24),
-          SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("ภาษีหัก ณ ที่จ่าย", style: TextStyle(fontSize: 14)),
+              Text("ภาษี", style: TextStyle(fontSize: 14)),
               Text(tax, style: TextStyle(fontSize: 14)),
             ],
           ),
           Divider(height: 24),
+          SizedBox(height: 12),
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: Row(

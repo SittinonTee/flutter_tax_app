@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_tax_app/Home/Detailincome.dart';
 import 'package:flutter_tax_app/Home/Pagebuttombar/Sumary.dart';
 
-
 class Boxcontent extends StatefulWidget {
   // final String user_id;
   // final String username;
@@ -42,12 +41,7 @@ class _BoxcontentState extends State<Boxcontent> {
     } else if (Pagenum == "2") {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Detailertax()),
-      );
-    } else if (Pagenum == "3") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Sumary()),
+        MaterialPageRoute(builder: (context) => Taxpage()),
       );
     }
   }
@@ -63,11 +57,6 @@ class _BoxcontentState extends State<Boxcontent> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Detailertax()),
-      );
-    } else if (Pagenum == "3") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Sumary()),
       );
     }
   }
@@ -88,8 +77,8 @@ class _BoxcontentState extends State<Boxcontent> {
           const SizedBox(height: 30),
           _buildCategoryCard('ลดหย่อนภาษี', formattedtax, Icons.savings, '2'),
           const SizedBox(height: 30),
-          _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings, '3'),
-          const SizedBox(height: 15),
+          // _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings, '3'),
+          // const SizedBox(height: 15),
         ],
       ),
     );

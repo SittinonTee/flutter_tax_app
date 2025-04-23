@@ -86,15 +86,13 @@ class _HomePageState extends State<HomePage> {
 
       if (res.statusCode == 200) {
         final data = jsonDecode(res.body);
-        // print(' Get data success: $data');
 
         setState(() {
           dataincome = data;
           if (dataincome.isNotEmpty) {
             _dataincome = dataincome[0];
-            // print('datauser ${datauser}');
+
             print('datauser ${_dataincome!}');
-            // print(_datauser?['amount']);
 
             for (var item in dataincome) {
               // print('oooo ${item['amount']}');
@@ -157,51 +155,27 @@ class _HomePageState extends State<HomePage> {
 
 // cal-----------------------------------------------------------------------
 
-  Future<void> calculateTax() async {
+  double calculateTax() {
     num totalAmount = incomeModel?.total_amount ?? 0;
     num totalTax = incomeModel?.total_tax ?? 0;
     num totalTaxWithhold = incomeModel?.total_tax_withhold ?? 0;
+
+    print(totalAmount);
+    print(totalTax);
+    print(totalTaxWithhold);
 
     num expense = totalAmount * 0.5;
     if (expense > 100000) {
       expense = 100000;
     }
 
-    num x = 60000;
+    num netIncome = totalAmount - expense - 60000;
+    netIncome -= totalTax + totalTaxWithhold;
 
-    // คำนวณเงินได้สุทธิก่อนหักลดหย่อนเพิ่มเติม
-    num netIncomeBeforeDeduction = totalAmount - expense - x;
+    if (netIncome < 0) {
+      netIncome = 0;
+    }
 
-    // เงินได้สุทธิหลังหักลดหย่อนปัจจุบัน
-    num currentNetIncome =
-        netIncomeBeforeDeduction - totalTax - totalTaxWithhold;
-
-    // คำนวณภาษีปัจจุบัน
-    double currentTax = calculateTaxByIncome(currentNetIncome);
-    incomeModel?.setpaytax(currentTax.toInt());
-
-    // คำนวณเงินได้สุทธิหากใช้สิทธิลดหย่อนเพิ่มเติมทั้งหมด
-    // สมมติว่ามีสิทธิลดหย่อนเพิ่มเติมสูงสุดที่ใช้ได้
-    num maxDeduction = calculateMaxAvailableDeduction(netIncomeBeforeDeduction);
-    num additionalDeduction = maxDeduction - (totalTax + totalTaxWithhold);
-    num potentialNetIncome = currentNetIncome - additionalDeduction;
-
-    // คำนวณภาษีที่อาจจ่ายน้อยที่สุด
-    double potentialMinTax = calculateTaxByIncome(potentialNetIncome);
-    print(potentialMinTax.toInt());
-    // incomeModel?.setPotentialMinTax(potentialMinTax.toInt());
-
-    // คำนวณเปอร์เซ็นต์สิทธิลดหย่อนที่ใช้ไปแล้ว
-    num totalPossibleDeduction =
-        calculateTotalPossibleDeduction(netIncomeBeforeDeduction);
-    num usedDeduction = totalTax + totalTaxWithhold;
-    double percentageUsed = (usedDeduction / totalPossibleDeduction) * 100;
-    print(percentageUsed.toInt());
-    // incomeModel?.setDeductionUsedPercentage(percentageUsed.toInt());
-  }
-
-// ฟังก์ชันคำนวณภาษีตามขั้นบันได
-  double calculateTaxByIncome(num netIncome) {
     double tax = 0;
 
     if (netIncome <= 150000) {
@@ -240,41 +214,8 @@ class _HomePageState extends State<HomePage> {
           (netIncome - 5000000) * 0.35;
     }
 
+    incomeModel?.setpaytax(tax.toInt());
     return tax;
-  }
-
-// ฟังก์ชันคำนวณสิทธิลดหย่อนสูงสุดที่สามารถใช้ได้
-  num calculateMaxAvailableDeduction(num income) {
-    // ตัวอย่างการคำนวณสิทธิลดหย่อนต่างๆ
-    num deduction = 0;
-
-    // ลดหย่อนกองทุน RMF (สูงสุด 30% ของรายได้ แต่ไม่เกิน 500,000 บาท)
-    num maxRmf = min(income * 0.3, 500000);
-
-    // ลดหย่อนกองทุน SSF (สูงสุด 30% ของรายได้ แต่ไม่เกิน 200,000 บาท)
-    num maxSsf = min(income * 0.3, 200000);
-
-    // ลดหย่อนประกันชีวิต (สูงสุด 100,000 บาท)
-    num insuranceDeduction = 100000;
-
-    // ลดหย่อนบริจาค (สูงสุด 10% ของรายได้หลังหักค่าใช้จ่ายและลดหย่อน)
-    num maxDonation = income * 0.1;
-
-    // รวมสิทธิลดหย่อนทั้งหมด
-    deduction = maxRmf + maxSsf + insuranceDeduction + maxDonation;
-
-    return deduction;
-  }
-
-// ฟังก์ชันคำนวณสิทธิลดหย่อนทั้งหมดที่เป็นไปได้
-  num calculateTotalPossibleDeduction(num income) {
-    // คล้ายกับฟังก์ชันข้างบน แต่อาจรวมถึงสิทธิลดหย่อนทั้งหมดตามกฎหมาย
-    return calculateMaxAvailableDeduction(income);
-  }
-
-// ฟังก์ชัน min (หาค่าน้อยที่สุดระหว่าง a และ b)
-  num min(num a, num b) {
-    return (a < b) ? a : b;
   }
 
   @override
