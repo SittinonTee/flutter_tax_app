@@ -46,7 +46,7 @@ class ShareDataUserid {
       return true;
     } else {
       final error = jsonDecode(response.body);
-      print('❌ Login failed: ${error['message']}');
+      print('Login failed: ${error['message']}');
       return false;
     }
   }

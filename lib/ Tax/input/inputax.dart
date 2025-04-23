@@ -1,45 +1,67 @@
 import 'dart:convert';
-// import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/Home.dart';
-import 'package:flutter_tax_app/userdatamodel.dart';
-import 'package:http/http.dart' as http;
-import 'dart:ui' as ui;
-
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_tax_app/Income/input/Withholding_tax.dart';
 import 'package:flutter_tax_app/Share_data/Share-data.dart';
+import 'package:http/http.dart' as http;
 
-class Withholding_tax extends StatefulWidget {
-  Withholding_tax(
+import 'package:intl/intl.dart';
+
+class InputTax extends StatefulWidget {
+  // const Inputincome({super.key});
+
+  const InputTax(
       {super.key,
       required this.type,
       required this.data,
-      required this.income});
+      required this.maxAmount});
 
   final String type;
   final String data;
-  int income;
+  final int maxAmount;
 
   @override
-  State<Withholding_tax> createState() => _Withholding_taxState();
+  State<InputTax> createState() => _InputTaxState();
 }
 
-class _Withholding_taxState extends State<Withholding_tax> {
-  // late UserModel userModel;
+class _InputTaxState extends State<InputTax> {
+  String displayText = "";
+  int tax = 0;
+  final formatter = NumberFormat('#,###');
 
-  @override
-  void initState() {
-    super.initState();
-    print(widget.income);
-    // userModel = Provider.of<UserModel>(context, listen: false);
+  void onNumberPressed(String number) {
+    setState(() {
+      String raw = displayText.replaceAll(',', '') + number;
+      tax = int.tryParse(raw) ?? 0;
+
+      displayText = formatter.format(tax);
+    });
   }
 
-  Future<bool> addincome() async {
+  void onDeletePressed() {
+    setState(() {
+      String raw = displayText.replaceAll(',', '');
+
+      if (raw.isNotEmpty) {
+        raw = raw.substring(0, raw.length - 1);
+        tax = int.tryParse(raw) ?? 0;
+        displayText = raw.isEmpty ? "" : formatter.format(tax);
+      }
+    });
+  }
+
+  void onACPressed() {
+    setState(() {
+      displayText = "";
+      tax = 0;
+    });
+  }
+
+  Future<bool> addtax() async {
     String? userId = await ShareDataUserid.getUserId();
     try {
-      final url = Uri.parse('http://localhost:3000/addincome');
+      final url = Uri.parse('http://localhost:3000/addtax');
 
       // final userModel = Provider.of<UserModel>(context, listen: false);
 
@@ -48,9 +70,8 @@ class _Withholding_taxState extends State<Withholding_tax> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'user_id': int.parse(userId!),
-          'amount': widget.income,
-          'tax_withhold': int.parse(displayTax),
-          'income_type': widget.type,
+          'tax': tax,
+          'tax_type': widget.type,
           'type_value': widget.data,
         }),
       );
@@ -58,9 +79,7 @@ class _Withholding_taxState extends State<Withholding_tax> {
       if (res.statusCode == 200) {
         print(res.body);
 
-        print('Add income success');
-        await checkypetax();
-
+        print('✅ Add tax success');
         return true;
       } else {
         print('❌ Failed to add income: ${res.body}');
@@ -72,88 +91,23 @@ class _Withholding_taxState extends State<Withholding_tax> {
     }
   }
 
-  Future<void> checkypetax() async {
-    // print("Get data request started");
-
-    String? userId = await ShareDataUserid.getUserId();
-
-    try {
-      final url =
-          Uri.parse('http://localhost:3000/checktypetax/${int.parse(userId!)}');
-
-      final res = await http.get(
-        url,
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (res.statusCode == 200) {
-        final data = jsonDecode(res.body);
-
-        if (data['success']) {
-          await addtax();
-        }
-      } else {
-        print(' Error fetching data: ${res.statusCode}');
-      }
-    } catch (e) {
-      print('Exception: $e');
-    }
-  }
-
-  Future<bool> addtax() async {
-    String? userId = await ShareDataUserid.getUserId();
-    try {
-      final url = Uri.parse('http://localhost:3000/addtax');
-      final res = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'user_id': int.parse(userId!),
-          'tax': 60000,
-          'tax_type': "คุณ และ ครอบครัว",
-          'type_value': "ค่าลดหย่อนส่วนตัว",
-        }),
-      );
-
-      if (res.statusCode == 200) {
-        print(res.body);
-
-        return true;
-      }
-      return false;
-    } catch (e) {
-      print(' Error: $e');
-      return false;
-    }
-  }
-
-  String displayTax = "";
-
-  void onNumberPressed(String number) {
-    setState(() {
-      displayTax += number;
-    });
-  }
-
-  void onDeletePressed() {
-    setState(() {
-      if (displayTax.isNotEmpty) {
-        displayTax = displayTax.substring(0, displayTax.length - 1);
-      }
-    });
-  }
-
-  void onACPressed() {
-    setState(() {
-      displayTax = "";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final type = widget.type;
     final data = widget.data;
-    int income = widget.income;
+    int maxAmount = widget.maxAmount;
+    print('$type $data  $maxAmount');
+
+    final formatter = NumberFormat('#,###');
+    String formattedAmount = formatter.format(maxAmount);
+
+    print("จำนวนเงินต้องไม่เกิน $formattedAmount บาท");
+
+    //  int income = 0;
+    // int tax = 0;
+
+    // int s = income;
 
     return Scaffold(
         appBar: AppBar(
@@ -162,7 +116,7 @@ class _Withholding_taxState extends State<Withholding_tax> {
           foregroundColor: Colors.black,
           elevation: 0,
           bottom: PreferredSize(
-            preferredSize: const ui.Size.fromHeight(1.0),
+            preferredSize: const Size.fromHeight(1.0),
             child: Container(
               color: Colors.grey,
               height: 1.0,
@@ -171,15 +125,12 @@ class _Withholding_taxState extends State<Withholding_tax> {
           actions: [
             TextButton(
               onPressed: () {
-                onPressed:
-                () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyApp(),
-                    ),
-                  );
-                };
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyApp(),
+                  ),
+                );
               },
               child: const Text(
                 'Home',
@@ -209,15 +160,15 @@ class _Withholding_taxState extends State<Withholding_tax> {
                           child: Column(
                             children: [
                               Text(
-                                "รายได้",
+                                "จำนวนเงิน",
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text("(ก่อนถูกหักภาษี)"),
-                              Text(displayTax),
+                              // Text("(ก่อนถูกหักภาษี)"),
+                              Text(displayText),
                               Text("ต่อปี"),
                             ],
                           ),
@@ -226,34 +177,69 @@ class _Withholding_taxState extends State<Withholding_tax> {
                           width: double.infinity,
                           color: Colors.deepOrange,
                           margin: EdgeInsets.all(20),
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: const Color.fromARGB(255, 170, 222, 112),
-                                border:
-                                    Border.all(color: Colors.black, width: 2)),
-                            child: Center(
-                                child: InkWell(
-                              onTap: displayTax.isEmpty
-                                  ? null
-                                  : () async {
-                                      bool success = await addincome();
-                                      if (success) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => MyApp(),
-                                          ),
-                                        );
-                                      }
-                                    },
-                              child: Text(
-                                "Done",
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.bold),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Text(
+                                  "จำนวนเงินต้องไม่เกิน $formattedAmount บาท",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
                               ),
-                            )),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: const Color.fromARGB(
+                                        255, 170, 222, 112),
+                                    border: Border.all(
+                                        color: Colors.black, width: 2)),
+                                child: Center(
+                                    child: InkWell(
+                                  onTap: displayText.isEmpty
+                                      ? null
+                                      : () async {
+                                          if (tax > maxAmount) {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text("Warning"),
+                                                  content: Text(
+                                                      "จำนวนต้องไม่เกิน $formattedAmount บาท"),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text("OK"),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            bool success = await addtax();
+                                            if (success) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => MyApp(),
+                                                ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                  child: Text(
+                                    "Next",
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )),
+                              ),
+                            ],
                           ),
                         )
                       ],

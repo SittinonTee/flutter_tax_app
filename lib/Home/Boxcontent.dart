@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tax_app/%C2%A0Tax/Tax.dart';
+import 'package:flutter_tax_app/Home/Detailtax.dart';
+import 'package:intl/intl.dart';
 import '../Income/incom.dart';
 import 'package:flutter_tax_app/userdatamodel.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_tax_app/Home/Detail.dart';
+import 'package:flutter_tax_app/Home/Detailincome.dart';
 
 class Boxcontent extends StatefulWidget {
   // final String user_id;
@@ -26,24 +29,71 @@ class _BoxcontentState extends State<Boxcontent> {
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
   }
 
+  Future<void> selestpage(Pagenum) async {
+    print(Pagenum);
+    if (Pagenum == "1") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => incomepage()),
+      );
+    } else if (Pagenum == "2") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Detailertax()),
+      );
+    } else if (Pagenum == "3") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => incomepage()),
+      );
+    }
+  }
+
+  Future<void> selestpagedetail(Pagenum) async {
+    print(Pagenum);
+    if (Pagenum == "1") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Detailer()),
+      );
+    } else if (Pagenum == "2") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Detailertax()),
+      );
+    } else if (Pagenum == "3") {
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => incomepage()),
+      // );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat('#,###');
+    final amount = incomeModel?.total_amount ?? 0;
+    final tax = incomeModel?.total_tax ?? 0;
+    final formattedAmount = amount == 0 ? '' : formatter.format(amount);
+    final formattedtax = amount == 0 ? '' : formatter.format(tax);
+
     return Expanded(
       child: ListView(
         children: [
-          _buildCategoryCard('รายได้', '${incomeModel?.total_amount}',
-              Icons.account_balance_wallet),
+          _buildCategoryCard(
+              'รายได้', formattedAmount, Icons.account_balance_wallet, '1'),
           const SizedBox(height: 30),
-          _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings),
+          _buildCategoryCard('ลดหย่อนภาษี', formattedtax, Icons.savings, '2'),
           const SizedBox(height: 30),
-          _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings),
+          _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings, '3'),
           const SizedBox(height: 15),
         ],
       ),
     );
   }
 
-  Widget _buildCategoryCard(String title, String value, IconData icon) {
+  Widget _buildCategoryCard(
+      String title, String value, IconData icon, String Pagenum) {
     return Stack(
       children: [
         Container(
@@ -71,12 +121,7 @@ class _BoxcontentState extends State<Boxcontent> {
             right: 0,
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Detailer(),
-                  ),
-                );
+                selestpagedetail(Pagenum);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -126,13 +171,7 @@ class _BoxcontentState extends State<Boxcontent> {
                       ],
                     ),
                     IconButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => incomepage(
-                                  // user_id: widget.user_id,
-                                  // username: widget.username,
-                                  ))),
+                      onPressed: () => selestpage(Pagenum),
                       icon: const Icon(Icons.add_circle,
                           color: Colors.white, size: 50),
                     )

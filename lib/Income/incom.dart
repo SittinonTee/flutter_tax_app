@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Home/Home.dart';
 import 'package:flutter_tax_app/Income/input/inputincome.dart';
+import 'package:http/http.dart' as http;
 
 class incomepage extends StatefulWidget {
   const incomepage({super.key});
@@ -30,12 +33,16 @@ final Map<String, List<String>> incomeData = {
 
 // int dd = 0;
 
+// List<Map<String, dynamic>> deductions = [];
+
 class _incomepageState extends State<incomepage> {
   @override
   void initState() {
     super.initState();
-    // print(widget.user_id);
+    // fetchDeductions();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

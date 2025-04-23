@@ -23,22 +23,50 @@ class UserModel extends ChangeNotifier {
 
 class IncomeModel extends ChangeNotifier {
   int? _total_amount;
+  int? _total_tax;
+  int? _total_tax_withhold;
+  int? _paytax;
   List<dynamic>? _incomeData;
+  List<dynamic>? _taxData;
 
-  // String? username;
+  // List<dynamic>? _tax_withholdData;
+
   int? get total_amount => _total_amount;
   List<dynamic>? get incomeData => _incomeData;
 
+  int? get total_tax => _total_tax;
+  List<dynamic>? get taxData => _taxData;
+
+  int? get total_tax_withhold => _total_tax_withhold;
+  int? get paytax => _paytax;
+
   void setincome(int? total_amount) {
-    // userId = id;
-    // username = name;
     _total_amount = total_amount;
     notifyListeners();
   }
 
   void setincomeData(List<dynamic>? incomeData) {
     _incomeData = incomeData;
-    // print('_incomeData      $_incomeData');
+    notifyListeners();
+  }
+
+  void settax(int? total_tax) {
+    _total_tax = total_tax;
+    notifyListeners();
+  }
+
+  void settaxData(List<dynamic>? taxData) {
+    _taxData = taxData;
+    notifyListeners();
+  }
+
+  void settax_withhold(int? total_tax_withhold) {
+    _total_tax_withhold = total_tax_withhold;
+    notifyListeners();
+  }
+
+  void setpaytax(int? paytax) {
+    _paytax = paytax;
     notifyListeners();
   }
 }

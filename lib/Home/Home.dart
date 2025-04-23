@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tax_app/Home/BalanceCard.dart';
 import 'package:flutter_tax_app/Home/Boxcontent.dart';
 import 'package:flutter_tax_app/Home/Pagebuttombar/Add.dart';
 import 'package:flutter_tax_app/Home/Pagebuttombar/NotificationsPage.dart';
@@ -48,23 +49,35 @@ class _HomePageState extends State<HomePage> {
   IncomeModel? incomeModel;
   List<Widget>? _pages;
   num totalAmount = 0;
+  num totaltax = 0;
+  num totaltaxwithhold = 0;
 
   @override
   void initState() {
     super.initState();
 
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
-    _loadDataUser();
+    // _loadincome();
+    // _loadtax();
+    _loaddatauser();
   }
 
-  List<dynamic> datauser = [];
-  Map<String, dynamic>? _datauser;
+  Future<void> _loaddatauser() async {
+    await _loadincome();
+    await _loadtax();
+    await calculateTax();
+  }
 
-  Future<void> _loadDataUser() async {
+  List<dynamic> dataincome = [];
+  Map<String, dynamic>? _dataincome;
+  List<dynamic> datatax = [];
+  Map<String, dynamic>? _datatax;
+
+  Future<void> _loadincome() async {
     String? userId = await ShareDataUserid.getUserId();
 
     try {
-      final url = Uri.parse('http://localhost:3000/getdata/${userId!}');
+      final url = Uri.parse('http://localhost:3000/getuserincome/${userId!}');
 
       final res = await http.get(
         url,
@@ -72,47 +85,207 @@ class _HomePageState extends State<HomePage> {
       );
 
       if (res.statusCode == 200) {
-        // แปลงข้อมูลที่ได้รับจาก API เป็น List<Map<String, dynamic>>
-
-        // final data = List<Map<String, dynamic>>.from(jsonDecode(res.body));
         final data = jsonDecode(res.body);
-        print('✅ Get data success: $data');
+        // print(' Get data success: $data');
 
         setState(() {
-          datauser = data;
-          if (datauser.isNotEmpty) {
-            _datauser = datauser[0];
+          dataincome = data;
+          if (dataincome.isNotEmpty) {
+            _dataincome = dataincome[0];
             // print('datauser ${datauser}');
-            print('datauser ${_datauser!}');
+            print('datauser ${_dataincome!}');
             // print(_datauser?['amount']);
 
-            for (var item in datauser) {
-              print('oooo ${item['amount']}');
+            for (var item in dataincome) {
+              // print('oooo ${item['amount']}');
               totalAmount += item['amount']!;
+              totaltaxwithhold += item['tax_withhold']!;
             }
 
             incomeModel?.setincome(totalAmount as int?);
-            incomeModel?.setincomeData(datauser);
+            incomeModel?.setincomeData(dataincome);
+            incomeModel?.settax_withhold(totaltaxwithhold as int?);
 
             // print('asdasdasdasdasd     ${incomeModel?.incomeData}');
           }
         });
       } else {
-        print('❌ Error: ${res.statusCode}');
+        print('Error: ${res.statusCode}');
       }
     } catch (e) {
-      print('❌ Exception: $e');
+      print('Exception: $e');
+    }
+  }
+
+  Future<void> _loadtax() async {
+    String? userId = await ShareDataUserid.getUserId();
+
+    try {
+      final url = Uri.parse('http://localhost:3000/getusertax/${userId!}');
+
+      final res = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        // print('Get data success: $data');
+
+        setState(() {
+          datatax = data;
+          if (datatax.isNotEmpty) {
+            _datatax = datatax[0];
+
+            for (var item in datatax) {
+              totaltax += item['tax']!;
+            }
+
+            incomeModel?.settax(totaltax as int?);
+            incomeModel?.settaxData(datatax);
+          }
+        });
+      } else {
+        print('Error: ${res.statusCode}');
+      }
+    } catch (e) {
+      print('Exception: $e');
     }
   }
 
   int _selectedIndex = 0;
+
+// cal-----------------------------------------------------------------------
+
+  Future<void> calculateTax() async {
+
+    num totalAmount = incomeModel?.total_amount ?? 0;
+    num totalTax = incomeModel?.total_tax ?? 0;
+    num totalTaxWithhold = incomeModel?.total_tax_withhold ?? 0;
+
+
+    num expense = totalAmount * 0.5;
+    if (expense > 100000) {
+      expense = 100000;
+    }
+
+    num x = 60000;
+
+    // คำนวณเงินได้สุทธิก่อนหักลดหย่อนเพิ่มเติม
+    num netIncomeBeforeDeduction = totalAmount - expense - x;
+
+    // เงินได้สุทธิหลังหักลดหย่อนปัจจุบัน
+    num currentNetIncome =
+        netIncomeBeforeDeduction - totalTax - totalTaxWithhold;
+
+    // คำนวณภาษีปัจจุบัน
+    double currentTax = calculateTaxByIncome(currentNetIncome);
+    incomeModel?.setpaytax(currentTax.toInt());
+
+    // คำนวณเงินได้สุทธิหากใช้สิทธิลดหย่อนเพิ่มเติมทั้งหมด
+    // สมมติว่ามีสิทธิลดหย่อนเพิ่มเติมสูงสุดที่ใช้ได้
+    num maxDeduction = calculateMaxAvailableDeduction(netIncomeBeforeDeduction);
+    num additionalDeduction = maxDeduction - (totalTax + totalTaxWithhold);
+    num potentialNetIncome = currentNetIncome - additionalDeduction;
+
+    // คำนวณภาษีที่อาจจ่ายน้อยที่สุด
+    double potentialMinTax = calculateTaxByIncome(potentialNetIncome);
+    print(potentialMinTax.toInt());
+    // incomeModel?.setPotentialMinTax(potentialMinTax.toInt());
+
+    // คำนวณเปอร์เซ็นต์สิทธิลดหย่อนที่ใช้ไปแล้ว
+    num totalPossibleDeduction =
+        calculateTotalPossibleDeduction(netIncomeBeforeDeduction);
+    num usedDeduction = totalTax + totalTaxWithhold;
+    double percentageUsed = (usedDeduction / totalPossibleDeduction) * 100;
+    print(percentageUsed.toInt());
+    // incomeModel?.setDeductionUsedPercentage(percentageUsed.toInt());
+  }
+
+// ฟังก์ชันคำนวณภาษีตามขั้นบันได
+  double calculateTaxByIncome(num netIncome) {
+    double tax = 0;
+
+    if (netIncome <= 150000) {
+      tax = 0;
+    } else if (netIncome <= 300000) {
+      tax = (netIncome - 150000) * 0.05;
+    } else if (netIncome <= 500000) {
+      tax = (150000 * 0.05) + (netIncome - 300000) * 0.10;
+    } else if (netIncome <= 750000) {
+      tax = (150000 * 0.05) + (200000 * 0.10) + (netIncome - 500000) * 0.15;
+    } else if (netIncome <= 1000000) {
+      tax = (150000 * 0.05) +
+          (200000 * 0.10) +
+          (250000 * 0.15) +
+          (netIncome - 750000) * 0.20;
+    } else if (netIncome <= 2000000) {
+      tax = (150000 * 0.05) +
+          (200000 * 0.10) +
+          (250000 * 0.15) +
+          (250000 * 0.20) +
+          (netIncome - 1000000) * 0.25;
+    } else if (netIncome <= 5000000) {
+      tax = (150000 * 0.05) +
+          (200000 * 0.10) +
+          (250000 * 0.15) +
+          (250000 * 0.20) +
+          (1000000 * 0.25) +
+          (netIncome - 2000000) * 0.30;
+    } else {
+      tax = (150000 * 0.05) +
+          (200000 * 0.10) +
+          (250000 * 0.15) +
+          (250000 * 0.20) +
+          (1000000 * 0.25) +
+          (3000000 * 0.30) +
+          (netIncome - 5000000) * 0.35;
+    }
+
+    return tax;
+  }
+
+// ฟังก์ชันคำนวณสิทธิลดหย่อนสูงสุดที่สามารถใช้ได้
+  num calculateMaxAvailableDeduction(num income) {
+    // ตัวอย่างการคำนวณสิทธิลดหย่อนต่างๆ
+    num deduction = 0;
+
+    // ลดหย่อนกองทุน RMF (สูงสุด 30% ของรายได้ แต่ไม่เกิน 500,000 บาท)
+    num maxRmf = min(income * 0.3, 500000);
+
+    // ลดหย่อนกองทุน SSF (สูงสุด 30% ของรายได้ แต่ไม่เกิน 200,000 บาท)
+    num maxSsf = min(income * 0.3, 200000);
+
+    // ลดหย่อนประกันชีวิต (สูงสุด 100,000 บาท)
+    num insuranceDeduction = 100000;
+
+    // ลดหย่อนบริจาค (สูงสุด 10% ของรายได้หลังหักค่าใช้จ่ายและลดหย่อน)
+    num maxDonation = income * 0.1;
+
+    // รวมสิทธิลดหย่อนทั้งหมด
+    deduction = maxRmf + maxSsf + insuranceDeduction + maxDonation;
+
+    return deduction;
+  }
+
+// ฟังก์ชันคำนวณสิทธิลดหย่อนทั้งหมดที่เป็นไปได้
+  num calculateTotalPossibleDeduction(num income) {
+    // คล้ายกับฟังก์ชันข้างบน แต่อาจรวมถึงสิทธิลดหย่อนทั้งหมดตามกฎหมาย
+    return calculateMaxAvailableDeduction(income);
+  }
+
+// ฟังก์ชัน min (หาค่าน้อยที่สุดระหว่าง a และ b)
+  num min(num a, num b) {
+    return (a < b) ? a : b;
+  }
+
   @override
   Widget build(BuildContext context) {
     _pages = [
       Homepage(),
       const Sumary(),
       const Add(),
-      const NotificationsPage(), //
+      const NotificationsPage(),
       const Profiledetail(),
     ];
 
@@ -162,7 +335,7 @@ class _HomePageState extends State<HomePage> {
   Widget Homepage() {
     return Column(
       children: [
-        BalanceCard(), // ส่วน BalanceCard
+        BalanceCard(),
         SizedBox(
           height: 60,
           child: Align(
@@ -170,7 +343,7 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
               child: const Text(
-                "รายการ", // ข้อความ "รายการ"
+                "รายการ",
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -179,97 +352,10 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        Boxcontent(
-            // user_id: userModel.userId!,
-            // username: userModel.username!), // ส่วน Boxcontent
-            )
+        Boxcontent()
       ],
     );
   }
-
-  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwBalanceCardwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-  Widget BalanceCard() {
-    // print('ddsd ${dd}');
-    return Container(
-      width: double.infinity,
-      height: 380,
-      padding: const EdgeInsets.all(20),
-      margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // ✅ กลางแนวตั้ง
-          crossAxisAlignment: CrossAxisAlignment.center, // ✅ กลางแนวนอน
-          children: [
-            const Text(
-              'ภาษีที่ต้องจ่าย',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "9999999999",
-              style: TextStyle(
-                color: Color(0xFFceff6a),
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              'คุณมีโอกาสทำเพิ่มอีก ฿ 0',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator(
-                    value: 0.5,
-                    strokeWidth: 8,
-                    backgroundColor: Colors.grey[800],
-                    valueColor:
-                        const AlwaysStoppedAnimation<Color>(Color(0xFFceff6a)),
-                  ),
-                ),
-                const Text(
-                  '50%',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: const Text(
-                'ได้สิทธิ์ลดหย่อนไปแล้ว',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 
   //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
   Widget buildBottomNavigationBar() {

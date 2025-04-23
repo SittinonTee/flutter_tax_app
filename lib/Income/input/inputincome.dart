@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tax_app/Home/Home.dart';
 import 'package:flutter_tax_app/Income/input/Withholding_tax.dart';
 
 class Inputincome extends StatefulWidget {
@@ -62,8 +63,14 @@ class _InputincomeState extends State<Inputincome> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, '/home'); // หรือ Navigator.popUntil(...)
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyApp(),
+                  ),
+                );
+              };
               },
               child: const Text(
                 'Home',
