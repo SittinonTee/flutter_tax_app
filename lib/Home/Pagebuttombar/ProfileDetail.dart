@@ -48,10 +48,10 @@ class _ProfiledetailState extends State<Profiledetail> {
           isLoading = false;
         });
       } else {
-        print('❌ Error: ${res.statusCode}');
+        print('Error: ${res.statusCode}');
       }
     } catch (e) {
-      print('❌ Exception: $e');
+      print('Exception: $e');
     }
   }
 
@@ -149,10 +149,10 @@ class _ProfiledetailState extends State<Profiledetail> {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
-              // child: Text(
-              //   _datauser?['old'] ?? '',
-              //   style: TextStyle(fontSize: 18),
-              // ),
+              child: Text(
+                _datauser?['age'] ?? '',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
 
             const Spacer(),

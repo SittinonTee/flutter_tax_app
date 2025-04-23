@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   num totaltax = 0;
   num totaltaxwithhold = 0;
 
+  num percentage = 0;
   @override
   void initState() {
     super.initState();
@@ -182,21 +183,26 @@ class _HomePageState extends State<HomePage> {
       tax = 0;
     } else if (netIncome <= 300000) {
       tax = (netIncome - 150000) * 0.05;
+      percentage = 5;
     } else if (netIncome <= 500000) {
       tax = (150000 * 0.05) + (netIncome - 300000) * 0.10;
+      percentage = 10;
     } else if (netIncome <= 750000) {
       tax = (150000 * 0.05) + (200000 * 0.10) + (netIncome - 500000) * 0.15;
+      percentage = 15;
     } else if (netIncome <= 1000000) {
       tax = (150000 * 0.05) +
           (200000 * 0.10) +
           (250000 * 0.15) +
           (netIncome - 750000) * 0.20;
+      percentage = 20;
     } else if (netIncome <= 2000000) {
       tax = (150000 * 0.05) +
           (200000 * 0.10) +
           (250000 * 0.15) +
           (250000 * 0.20) +
           (netIncome - 1000000) * 0.25;
+      percentage = 25;
     } else if (netIncome <= 5000000) {
       tax = (150000 * 0.05) +
           (200000 * 0.10) +
@@ -204,6 +210,7 @@ class _HomePageState extends State<HomePage> {
           (250000 * 0.20) +
           (1000000 * 0.25) +
           (netIncome - 2000000) * 0.30;
+      percentage = 30;
     } else {
       tax = (150000 * 0.05) +
           (200000 * 0.10) +
@@ -212,6 +219,7 @@ class _HomePageState extends State<HomePage> {
           (1000000 * 0.25) +
           (3000000 * 0.30) +
           (netIncome - 5000000) * 0.35;
+      percentage = 35;
     }
 
     incomeModel?.setpaytax(tax.toInt());
@@ -274,7 +282,9 @@ class _HomePageState extends State<HomePage> {
   Widget Homepage() {
     return Column(
       children: [
-        BalanceCard(),
+        BalanceCard(
+          percentage: percentage,
+        ),
         SizedBox(
           height: 60,
           child: Align(

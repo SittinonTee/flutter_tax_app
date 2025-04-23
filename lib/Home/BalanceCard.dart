@@ -5,8 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BalanceCard extends StatefulWidget {
-  const BalanceCard({super.key});
+  const BalanceCard({super.key, required this.percentage});
 
+  final num percentage;
   @override
   State<BalanceCard> createState() => _BalanceCardState();
 }
@@ -24,6 +25,7 @@ class _BalanceCardState extends State<BalanceCard> {
 
   @override
   Widget build(BuildContext context) {
+    final percentage = widget.percentage;
     // final amount = incomeModel?.total_amount ?? 0;
     // final tax = incomeModel?.total_tax ?? 0;
     // final taxWithhold = incomeModel?.total_tax_withhold ?? 0;
@@ -64,7 +66,7 @@ class _BalanceCardState extends State<BalanceCard> {
               ),
             ),
             const Text(
-              'คุณมีโอกาสทำเพิ่มอีก ฿ 0',
+              'อัตราภาษีที่ต้องจ่าย',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -78,15 +80,15 @@ class _BalanceCardState extends State<BalanceCard> {
                   width: 80,
                   height: 80,
                   child: CircularProgressIndicator(
-                    value: 0.5,
+                    value: percentage / 100,
                     strokeWidth: 8,
                     backgroundColor: Colors.grey[800],
                     valueColor:
                         const AlwaysStoppedAnimation<Color>(Color(0xFFceff6a)),
                   ),
                 ),
-                const Text(
-                  '50%',
+                Text(
+                  '${percentage}%',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
