@@ -225,6 +225,8 @@ class _DetailertaxState extends State<Detailertax> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shape: RoundedRectangleBorder( side: const BorderSide(color: Colors.black, width: 1),),
+        backgroundColor: Color(0xFFceff6a),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -242,6 +244,7 @@ class _DetailertaxState extends State<Detailertax> {
         ),
         centerTitle: false,
       ),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -249,6 +252,7 @@ class _DetailertaxState extends State<Detailertax> {
             Expanded(
               child: Column(
                 children: [
+                  SizedBox(height: 20,),
                   Boxbalance(
                       "ภาษีที่ต้องจ่ายประจำปี", totalAmount.toString() ?? "0"),
                   incomeData.isEmpty
@@ -304,7 +308,7 @@ class _DetailertaxState extends State<Detailertax> {
 
   Widget Boxbalance(String title, String value) {
     return Container(
-        padding: EdgeInsets.all(60),
+        padding: EdgeInsets.all(50),
         margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
         // margin: EdgeInsets.all(15),
         decoration: BoxDecoration(
@@ -331,14 +335,17 @@ class _DetailertaxState extends State<Detailertax> {
           Divider(height: 24), // ขีดเส้น
 
           Text(
-            value,
+            "฿$value",
             style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFFceff6a)),
           ),
-        ]));
+        ])
+        );
+        
   }
+
 
   Widget paymentCard({
     required String title,
@@ -352,16 +359,20 @@ class _DetailertaxState extends State<Detailertax> {
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            offset: Offset(0, 4),
-          )
-        ],
+      color: const Color.fromARGB(255, 255, 255, 255),
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(
+        color: const Color.fromARGB(55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
+        width: 2,
       ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 6,
+          offset: const Offset(0, 4),
+        )
+      ],
+    ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

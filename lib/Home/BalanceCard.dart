@@ -43,7 +43,7 @@ class _BalanceCardState extends State<BalanceCard> {
       ),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
@@ -51,6 +51,7 @@ class _BalanceCardState extends State<BalanceCard> {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
+                fontFamily: 'Noto Sans Thai',
               ),
             ),
             const SizedBox(height: 10),
@@ -66,7 +67,7 @@ class _BalanceCardState extends State<BalanceCard> {
               'คุณมีโอกาสทำเพิ่มอีก ฿ 0',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 16,
               ),
             ),
             const SizedBox(height: 20),
@@ -74,8 +75,8 @@ class _BalanceCardState extends State<BalanceCard> {
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  width: 100,
-                  height: 100,
+                  width: 80,
+                  height: 80,
                   child: CircularProgressIndicator(
                     value: 0.5,
                     strokeWidth: 8,
@@ -89,20 +90,20 @@ class _BalanceCardState extends State<BalanceCard> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 30),
+                      fontSize: 25),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(30),
               ),
               child: const Text(
                 'ได้สิทธิ์ลดหย่อนไปแล้ว',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],

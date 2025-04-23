@@ -189,6 +189,8 @@ class _DetailerState extends State<Detailer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shape: RoundedRectangleBorder( side: const BorderSide(color: Colors.black, width: 1),),
+        backgroundColor: Color(0xFFceff6a),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -206,6 +208,7 @@ class _DetailerState extends State<Detailer> {
         ),
         centerTitle: false,
       ),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -268,8 +271,8 @@ class _DetailerState extends State<Detailer> {
 
   Widget Boxbalance(String title, String value) {
     return Container(
-        padding: EdgeInsets.all(60),
-        margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
+        padding: EdgeInsets.all(50),
+        margin: EdgeInsets.fromLTRB(15, 15, 15, 15),
         // margin: EdgeInsets.all(15),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 0, 0, 0),
@@ -316,16 +319,20 @@ class _DetailerState extends State<Detailer> {
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            offset: Offset(0, 4),
-          )
-        ],
+      color: const Color.fromARGB(255, 255, 255, 255),
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(
+        color: const Color.fromARGB(55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
+        width: 2,
       ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 6,
+          offset: const Offset(0, 4),
+        )
+      ],
+    ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

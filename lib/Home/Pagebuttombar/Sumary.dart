@@ -74,7 +74,7 @@ Widget Boxsumary(String title, String value) {
               color: Color(0xFFceff6a)),
         ),
 
-         Divider(height: 24), // ขีดเส้น
+        Divider(height: 24), // ขีดเส้น
 
         Text(
           title,
@@ -83,8 +83,6 @@ Widget Boxsumary(String title, String value) {
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 255, 255, 255)),
         ),
-
-       
       ]));
 }
 
@@ -98,11 +96,22 @@ Widget Boxcontenter(
     required String value3,
     required String value4}) {
   return Container(
-    padding: EdgeInsets.all(15),
+    padding: EdgeInsets.all(20),
     margin: EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: const Color.fromARGB(232, 230, 229, 229),
-      borderRadius: BorderRadius.circular(10),
+      color: const Color.fromARGB(255, 255, 255, 255),
+      borderRadius: BorderRadius.circular(20),
+      border: Border.all(
+        color: const Color.fromARGB(55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
+        width: 2,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 6,
+          offset: const Offset(0, 4),
+        )
+      ],
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +126,7 @@ Widget Boxcontenter(
             Text("฿$value1", style: TextStyle(fontSize: 16)),
           ],
         ),
-        Divider(height: 24), // ขีดเส้น
+        Divider(height: 24,), // ขีดเส้น
 
         SizedBox(height: 12),
         // ------------------------------------------------------------แถวที่2
@@ -148,14 +157,12 @@ Widget Boxcontenter(
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title4, style: TextStyle(fontSize: 16)),
+            Text(title4, style: TextStyle(fontSize: 14)),
             Text("฿$value4",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 14,)),
           ],
         ),
       ],
     ),
   );
-  
 }
-

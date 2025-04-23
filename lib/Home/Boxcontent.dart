@@ -101,7 +101,7 @@ class _BoxcontentState extends State<Boxcontent> {
           height: 120,
           decoration: BoxDecoration(
             color: const Color(0xFFceff6a),
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
                 color: const Color.fromARGB(255, 0, 0, 0).withOpacity(1),
                 width: 2),
@@ -134,7 +134,7 @@ class _BoxcontentState extends State<Boxcontent> {
                   //   bottomLeft: Radius.circular(30),
                   //   bottomRight: Radius.circular(30),
                   // ),
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +144,7 @@ class _BoxcontentState extends State<Boxcontent> {
                       decoration: BoxDecoration(
                         color:
                             const Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Icon(
                         icon,

@@ -42,13 +42,12 @@ class _incomepageState extends State<incomepage> {
     // fetchDeductions();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(side: const BorderSide(color: Colors.black, width: 1),),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         foregroundColor: Colors.black,
         elevation: 0,
         bottom: PreferredSize(
@@ -58,18 +57,11 @@ class _incomepageState extends State<incomepage> {
             height: 1.0,
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()));
-            },
-            child: const Text(
-              'Home',
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
+        title: Align(
+          alignment: Alignment.centerRight,
+          child: Text("Home"),
+        ),
+        centerTitle: false,
       ),
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
@@ -77,10 +69,10 @@ class _incomepageState extends State<incomepage> {
           children: [
             // const SizedBox(height: 50),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(0),
               child: Container(
                 width: double.infinity,
-                color: const Color.fromARGB(255, 104, 26, 26),
+                color: const Color.fromARGB(255, 171, 255, 119),
                 padding: const EdgeInsets.all(20),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -92,7 +84,7 @@ class _incomepageState extends State<incomepage> {
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                       SizedBox(height: 8),
@@ -100,7 +92,7 @@ class _incomepageState extends State<incomepage> {
                         "รายได้ต่อปีของคุณ",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.white,
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                     ],
@@ -108,9 +100,12 @@ class _incomepageState extends State<incomepage> {
                 ),
               ),
             ),
+
+            Divider(height: 0),
+
             Container(
-              decoration:
-                  BoxDecoration(color: const Color.fromARGB(255, 41, 59, 222)),
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255)),
               child: Column(
                 children: List.generate(
                   (incomeItems.length / 2).ceil(),
@@ -140,7 +135,9 @@ class _incomepageState extends State<incomepage> {
             ),
             SizedBox(height: 20),
             Container(
-              decoration: BoxDecoration(color: Colors.amberAccent),
+              // margin: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255)),
               child: Column(
                 children: incomeData.entries.map((entry) {
                   final type = entry.key;
@@ -168,7 +165,7 @@ class _incomepageState extends State<incomepage> {
             padding: const EdgeInsets.all(15),
             height: 100,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 69, 69, 69),
+              color: const Color.fromARGB(255, 0, 0, 0),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: const Color.fromARGB(255, 0, 0, 0).withOpacity(1),
@@ -219,12 +216,16 @@ class _incomepageState extends State<incomepage> {
       children: [
         // หัวข้อ type
         Container(
-          height: 30,
+          // height: 30,
           width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          color: const Color.fromARGB(255, 171, 255, 119),
+          padding: const EdgeInsets.all(10),
           child: Text(
             type,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
         ),
 
@@ -241,13 +242,13 @@ class _incomepageState extends State<incomepage> {
             },
             child: Container(
               width: double.infinity,
-              height: 30,
-              color: CupertinoColors.systemIndigo,
-              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+              color: const Color.fromARGB(255, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(30, 5, 5, 5),
               alignment: Alignment.centerLeft,
               child: Text(
                 data,
-                style: const TextStyle(color: Colors.white),
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
               ),
             ),
           );
