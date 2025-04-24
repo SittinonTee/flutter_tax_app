@@ -33,8 +33,6 @@ class _DetailertaxState extends State<Detailertax> {
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
 
     taxData = List<Map<String, dynamic>>.from(incomeModel?.incomeData ?? []);
-    // print(incomeData);
-    // _loadincome();
 
     _loadtax();
   }
@@ -55,7 +53,7 @@ class _DetailertaxState extends State<Detailertax> {
       if (res.statusCode == 200) {
         final deletedItem = taxData[index];
         final taxToRemove = num.parse(deletedItem['tax']?.toString() ?? '0');
-        // await _loadincome();
+
         await _loadtax();
         setState(() {
           taxData.removeAt(index);
@@ -324,7 +322,7 @@ class _DetailertaxState extends State<Detailertax> {
                 color: Color.fromARGB(255, 255, 255, 255)),
           ),
 
-          Divider(height: 24), // ขีดเส้น
+          Divider(height: 24), 
 
           Text(
             "฿$value",
@@ -350,7 +348,7 @@ class _DetailertaxState extends State<Detailertax> {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: const Color.fromARGB(
-              55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
+              55, 0, 0, 0),
           width: 2,
         ),
         boxShadow: [
@@ -370,7 +368,7 @@ class _DetailertaxState extends State<Detailertax> {
               Text(title,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               InkWell(
-                onTap: onEdit, // Added edit functionality
+                onTap: onEdit, 
                 child: Icon(
                   Icons.edit,
                   size: 18,

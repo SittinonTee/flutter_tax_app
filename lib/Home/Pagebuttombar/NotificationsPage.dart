@@ -17,16 +17,16 @@ class _NotificationsPageState extends State<NotificationsPage> {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3), // สีหม่น
-                blurRadius: 15, // ความเบลอของเงา
-                spreadRadius: 3, // กระจายออก
-                offset: Offset(0, 5), // ตำแหน่งเงา
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 15,
+                spreadRadius: 3,
+                offset: Offset(0, 5),
               ),
             ],
-            borderRadius: BorderRadius.circular(15), // ขอบมน
+            borderRadius: BorderRadius.circular(15),
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(15), // ตัดรูปให้ขอบโค้งตามกรอบ
+            borderRadius: BorderRadius.circular(15),
             child: Image.asset(
               'assets/images/tax2.jpeg',
               width: 500,

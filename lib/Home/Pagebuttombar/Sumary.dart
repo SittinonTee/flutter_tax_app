@@ -180,7 +180,7 @@ Widget Boxsumary(String title, String value) {
               color: Color(0xFFceff6a)),
         ),
 
-        Divider(height: 20), // ขีดเส้น
+        Divider(height: 20), 
 
         Text(
           title,
@@ -240,7 +240,7 @@ Widget Boxcontenter(
             Text("฿$taxwithhold", style: TextStyle(fontSize: 16)),
           ],
         ),
-        Divider(height: 24), // ขีดเส้น
+        Divider(height: 24),
         SizedBox(height: 12),
       ],
     ),

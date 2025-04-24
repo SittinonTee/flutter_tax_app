@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tax_app/Login/Login.dart';
+import 'package:flutter_tax_app/Share_data/Share-data.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -11,6 +15,8 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   String username = '';
   String email = '';
@@ -20,10 +26,20 @@ class _SignUpPageState extends State<SignUpPage> {
   String confirmPassword = '';
   bool _obscureText = true;
   bool _obscureConfirmText = true;
+  bool _isLoading = false;
+
+  // API endpoint for signup
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final fieldWidth = MediaQuery.of(context).size.width * 0.8; // 80% ของหน้าจอ
+    final fieldWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,22 +47,19 @@ class _SignUpPageState extends State<SignUpPage> {
         key: _formKey,
         child: Column(
           children: [
-            // Header
             Expanded(
               flex: 4,
               child: Container(
                 width: double.infinity,
                 child: Center(
-                   child: Image.asset(
-                      'assets/images/tax2.jpeg',
-                      width: 500,
-                      fit: BoxFit.cover,
-                    ),
+                  child: Image.asset(
+                    'assets/images/tax2.jpeg',
+                    width: 500,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-
-            // ฟิลด์ทั้งหมด
             Expanded(
               flex: 6,
               child: SingleChildScrollView(
@@ -70,7 +83,16 @@ class _SignUpPageState extends State<SignUpPage> {
                         label: "Email",
                         keyboardType: TextInputType.emailAddress,
                         onSaved: (val) => email = val!,
-                        validatorMsg: "กรอกอีเมลด้วย",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "กรอกอีเมลด้วย";
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return "รูปแบบอีเมลไม่ถูกต้อง";
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     SizedBox(
@@ -80,7 +102,16 @@ class _SignUpPageState extends State<SignUpPage> {
                         label: "Phone",
                         keyboardType: TextInputType.phone,
                         onSaved: (val) => phone = val!,
-                        validatorMsg: "กรอกเบอร์โทรด้วย",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "กรอกเบอร์โทรด้วย";
+                          }
+                          // Validate phone number format (Thai format)
+                          if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                            return "เบอร์โทรต้องเป็นตัวเลข 10 หลัก";
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     SizedBox(
@@ -90,7 +121,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         label: "Age",
                         keyboardType: TextInputType.number,
                         onSaved: (val) => age = val!,
-                        validatorMsg: "กรอกอายุก่อน",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "กรอกอายุก่อน";
+                          }
+                          if (int.tryParse(value) == null) {
+                            return "อายุต้องเป็นตัวเลข";
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     SizedBox(
@@ -98,6 +137,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: buildTextField(
                         icon: Icons.lock,
                         label: "Password",
+                        controller: _passwordController,
                         obscureText: _obscureText,
                         suffixIcon: IconButton(
                           icon: Icon(_obscureText
@@ -115,6 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: buildTextField(
                         icon: Icons.lock,
                         label: "Confirm Password",
+                        controller: _confirmPasswordController,
                         obscureText: _obscureConfirmText,
                         suffixIcon: IconButton(
                           icon: Icon(_obscureConfirmText
@@ -124,27 +165,38 @@ class _SignUpPageState extends State<SignUpPage> {
                               () => _obscureConfirmText = !_obscureConfirmText),
                         ),
                         onSaved: (val) => confirmPassword = val!,
-                        validatorMsg: "ยืนยันรหัสผ่าน",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "ยืนยันรหัสผ่าน";
+                          }
+                          if (value != _passwordController.text) {
+                            return "รหัสผ่านไม่ตรงกัน";
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _onSignUpPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.lightGreen,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: 50,
-                        ),
-                      ),
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
+                    _isLoading
+                        ? CircularProgressIndicator(color: Colors.lightGreen)
+                        : ElevatedButton(
+                            onPressed: _onSignUpPressed,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.lightGreen,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 15,
+                                horizontal: 50,
+                              ),
+                            ),
+                            child: const Text(
+                              "Sign Up",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          ),
                     SizedBox(
                       height: 20,
                     ),
@@ -156,14 +208,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           TextSpan(
                             text: "   Login",
                             style: TextStyle(
-                              color:
-                                  Color.fromARGB(255, 8, 156, 241), // สีไฮไลต์
+                              color: Color.fromARGB(255, 8, 156, 241),
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                // เปลี่ยนไปหน้าสมัครสมาชิก
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -184,9 +234,12 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void _onSignUpPressed() {
+  Future<void> _onSignUpPressed() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      print("object");
+
       if (password != confirmPassword) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -194,37 +247,58 @@ class _SignUpPageState extends State<SignUpPage> {
             backgroundColor: Colors.red,
           ),
         );
+        print("object1");
         return;
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("สมัครเรียบร้อยแล้ว!"),
-          backgroundColor: Colors.green,
-        ),
-      );
+
+      final userData = {
+        'username': username,
+        'email': email,
+        'phone': phone,
+        'age': age,
+        'password': password,
+      };
+
+      print("object2");
+      bool success = await ShareDataUserid.signup(userData);
+      print(success);
+      if (success) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Login()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('สมัครล้มเหลว')),
+        );
+      }
     }
   }
 
   Widget buildTextField({
     required IconData icon,
     required String label,
+    TextEditingController? controller,
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
     Widget? suffixIcon,
-    required String? Function(String?)? onSaved,
-    required String validatorMsg,
+    void Function(String?)? onSaved,
+    String? Function(String?)? validator,
+    String? validatorMsg,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
+        controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
         onSaved: onSaved,
-        validator: (value) =>
-            (value == null || value.isEmpty) ? validatorMsg : null,
+        validator: validator ??
+            ((value) => (value == null || value.isEmpty) ? validatorMsg : null),
         decoration: InputDecoration(
           prefixIcon: Icon(icon),
-          labelText: label,labelStyle: TextStyle(color: Colors.black),
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.black),
           suffixIcon: suffixIcon,
           filled: true,
           fillColor: const Color(0xFFE6E6E6),

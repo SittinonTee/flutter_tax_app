@@ -20,9 +20,9 @@ List<Map<String, dynamic>> incomeItems = [
   {"title": "เงินเดือน", "value": "30,000", "icon": Icons.work},
   {"title": "โบนัส", "value": "5,000", "icon": Icons.card_giftcard},
   {"title": "ขายของ", "value": "10,000", "icon": Icons.store},
-  {"title": "อื่น ๆ", "value": "2,000", "icon": Icons.attach_money},
-  {"title": "อื่น ๆ", "value": "2,000", "icon": Icons.attach_money},
-  {"title": "อื่น ๆ", "value": "2,000", "icon": Icons.attach_money}
+  {"title": "อาหารเครื่องดื่ม", "value": "2,000", "icon": Icons.food_bank},
+  {"title": "กำไร", "value": "2,000", "icon": Icons.token},
+  {"title": "เงินปันผล", "value": "2,000", "icon": Icons.money}
 ];
 
 final Map<String, List<String>> incomeData = {
@@ -164,69 +164,76 @@ class _incomepageState extends State<incomepage> {
 
   Widget Incomecrad(String title, String value, IconData icon) {
     return Container(
-      decoration: BoxDecoration(
-          // border: Border.all(color: Colors.black, width: 2),
-          // boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
-          borderRadius: BorderRadius.circular(20)),
-      margin: const EdgeInsets.all(10),
-      child: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(15),
-            height: 100,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 69, 69, 69),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: const Color.fromARGB(255, 0, 0, 0).withOpacity(1),
-                width: 2,
+        decoration: BoxDecoration(
+            // border: Border.all(color: Colors.black, width: 2),
+            // boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 5)],
+            borderRadius: BorderRadius.circular(20)),
+        margin: const EdgeInsets.all(10),
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Inputincome(type: title, data: value),
               ),
-            ),
-            alignment: Alignment.topLeft,
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 40,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              height: 40,
-              decoration: BoxDecoration(
-                color: const Color(0xFFceff6a),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.black, width: 2),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+            );
+          },
+          child: Stack(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(15),
+                height: 100,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 69, 69, 69),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 0, 0, 0).withOpacity(1),
+                    width: 2,
                   ),
-                ],
+                ),
+                alignment: Alignment.topLeft,
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 40,
+                ),
               ),
-            ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFceff6a),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.black, width: 2),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget incomecrad2(BuildContext context, String type, List<String> dataList) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // หัวข้อ type
         Container(
-          // height: 30,
           width: double.infinity,
           color: const Color.fromARGB(199, 146, 146, 146),
           padding: const EdgeInsets.all(10),
@@ -238,8 +245,6 @@ class _incomepageState extends State<incomepage> {
             ),
           ),
         ),
-
-        // ลูปข้อมูลแต่ละแถวของ type
         ...dataList.map((data) {
           return InkWell(
             onTap: () {
@@ -262,7 +267,6 @@ class _incomepageState extends State<incomepage> {
             ),
           );
         }),
-
         const SizedBox(height: 10),
       ],
     );

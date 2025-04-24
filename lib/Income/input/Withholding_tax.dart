@@ -63,11 +63,11 @@ class _Withholding_taxState extends State<Withholding_tax> {
 
         return true;
       } else {
-        print('❌ Failed to add income: ${res.body}');
+        print('Failed to add income: ${res.body}');
         return false;
       }
     } catch (e) {
-      print('❌ Error: $e');
+      print('Error: $e');
       return false;
     }
   }

@@ -31,7 +31,6 @@ class _DetailerState extends State<Detailer> {
     incomeModel = Provider.of<IncomeModel>(context, listen: false);
 
     incomeData = List<Map<String, dynamic>>.from(incomeModel?.incomeData ?? []);
-    // print(incomeData);
     _loadincome();
   }
 
@@ -89,7 +88,6 @@ class _DetailerState extends State<Detailer> {
           dataincome = data;
           if (dataincome.isNotEmpty) {
             _dataincome = dataincome[0];
-
             totalAmount = 0;
             for (var item in dataincome) {
               totalAmount += item['amount']!;
@@ -139,7 +137,7 @@ class _DetailerState extends State<Detailer> {
                 decoration: InputDecoration(
                   labelText: "Income",
                   labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold, // ตัวหนา
+                    fontWeight: FontWeight.bold, 
                     fontSize: 20,
                   ),
                   filled: true,
@@ -151,15 +149,13 @@ class _DetailerState extends State<Detailer> {
                 ),
                 keyboardType: TextInputType.number,
               ),
-
               SizedBox(height: 12),
-
               TextField(
                 controller: taxController,
                 decoration: InputDecoration(
                   labelText: "ภาษีหัก ณ ที่จ่าย",
                   labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold, // ตัวหนา
+                    fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
                   filled: true,
@@ -236,15 +232,15 @@ class _DetailerState extends State<Detailer> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 0,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1.0),
-            child: Container(
-              color: Colors.grey,
-              height: 1.0,
-            ),
+        foregroundColor: Colors.black,
+        elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey,
+            height: 1.0,
           ),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -258,7 +254,10 @@ class _DetailerState extends State<Detailer> {
         ),
         title: Align(
           alignment: Alignment.centerRight,
-          child: Text("Income",style: TextStyle(fontWeight: FontWeight.bold),),
+          child: Text(
+            "Income",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         centerTitle: false,
       ),
@@ -349,7 +348,7 @@ class _DetailerState extends State<Detailer> {
                 color: Color.fromARGB(255, 255, 255, 255)),
           ),
 
-          Divider(height: 24), // ขีดเส้น
+          Divider(height: 24), 
 
           Text(
             value,
@@ -367,7 +366,7 @@ class _DetailerState extends State<Detailer> {
     required String tax,
     required VoidCallback onDelete,
     required VoidCallback onDetail,
-    required VoidCallback onEdit, // Added new onEdit callback
+    required VoidCallback onEdit, 
   }) {
     return Container(
       padding: EdgeInsets.all(20),
@@ -377,7 +376,7 @@ class _DetailerState extends State<Detailer> {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: const Color.fromARGB(
-              55, 0, 0, 0), // สีขอบตามที่ต้องการ เปลี่ยนเป็น Colors.black ก็ได้
+              55, 0, 0, 0), 
           width: 2,
         ),
         boxShadow: [
@@ -397,7 +396,7 @@ class _DetailerState extends State<Detailer> {
               Text(title,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               InkWell(
-                onTap: onEdit, // Added edit functionality
+                onTap: onEdit,
                 child: Icon(
                   Icons.edit,
                   size: 18,
@@ -433,7 +432,7 @@ class _DetailerState extends State<Detailer> {
             padding: EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment
-                  .spaceAround, // Changed to spaceAround for better spacing
+                  .spaceAround, 
               children: [
                 InkWell(
                   onTap: onDelete,

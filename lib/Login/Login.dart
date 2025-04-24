@@ -48,10 +48,6 @@ class _LoginState extends State<Login> {
         MaterialPageRoute(builder: (_) => MyApp()),
       );
     } else {
-      // ไปหน้า Login ได้ถ้าต้องการ
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(builder: (_) => LoginScreen()),
-      // );
     }
   }
 
@@ -172,7 +168,7 @@ class _LoginState extends State<Login> {
                           ),
                           errorStyle: TextStyle(
                             color: const Color.fromARGB(
-                                255, 252, 3, 3), // เปลี่ยนสีข้อความแจ้งเตือน
+                                255, 252, 3, 3), 
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -185,8 +181,6 @@ class _LoginState extends State<Login> {
                         onSaved: (value) => {Username = value!}),
 
                     const SizedBox(height: 40),
-
-                    // Password Field
 
                     TextFormField(
                       obscureText: _obscureText,
@@ -202,7 +196,7 @@ class _LoginState extends State<Login> {
                         ),
                         errorStyle: TextStyle(
                           color: const Color.fromARGB(
-                              255, 255, 0, 0), // เปลี่ยนสีข้อความแจ้งเตือน
+                              255, 255, 0, 0), 
                           fontWeight: FontWeight.bold,
                         ),
                         suffixIcon: IconButton(
@@ -265,13 +259,13 @@ class _LoginState extends State<Login> {
                             text: "   Signup",
                             style: TextStyle(
                               color:
-                                  Color.fromARGB(255, 8, 156, 241), // สีไฮไลต์
+                                  Color.fromARGB(255, 8, 156, 241),
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                // เปลี่ยนไปหน้าสมัครสมาชิก
+                           
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

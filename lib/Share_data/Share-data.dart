@@ -18,7 +18,7 @@ class ShareDataUserid {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print('✅ Login successกกกกกก: $data');
+      print(' Login successกกกกกก: $data');
 
       var user = data['user'];
       String userId = user['user_id'].toString();
@@ -79,5 +79,26 @@ class ShareDataUserid {
     await prefs.remove(key_userId);
     await prefs.remove(key_username);
     await prefs.setBool(key_isLogin, false);
+  }
+
+  static Future<bool> signup(Map<String, dynamic> data) async {
+    final url = Uri.parse('http://localhost:3000/signup');
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print(' Login successกกกกกก: $data');
+
+      return true;
+    } else {
+      final error = jsonDecode(response.body);
+      print('Login failed: ${error['message']}');
+      return false;
+    }
   }
 }

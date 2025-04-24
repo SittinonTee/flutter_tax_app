@@ -63,12 +63,11 @@ class _ProfiledetailState extends State<Profiledetail> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(20), //padding เนื้อหา
-
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // จัดเนื้อหาแบบแนวนอน
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20), // กล่องให้ห่างจากข้างบน 20
+            const SizedBox(height: 20),
             const Text(
               'ชื่อผู้ใช้งาน',
               style: TextStyle(
@@ -76,13 +75,11 @@ class _ProfiledetailState extends State<Profiledetail> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            const SizedBox(height: 10), // กล่องให้ห่างจากข้างบน 10
+            const SizedBox(height: 10),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -91,19 +88,16 @@ class _ProfiledetailState extends State<Profiledetail> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-
             const SizedBox(height: 20),
             const Text(
               'อีเมล',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: 10),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -112,19 +106,16 @@ class _ProfiledetailState extends State<Profiledetail> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-
             const SizedBox(height: 20),
             const Text(
               'เบอร์โทร',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: 10),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -133,28 +124,24 @@ class _ProfiledetailState extends State<Profiledetail> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-
             const SizedBox(height: 20),
             const Text(
               'อายุ',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: 10),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                //ใช้ปรับแต่ง Container
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                _datauser?['age'] ?? '',
+                _datauser?['age']?.toString() ?? '',
                 style: TextStyle(fontSize: 18),
               ),
             ),
-
             const Spacer(),
             const SizedBox(height: 40),
             Center(
