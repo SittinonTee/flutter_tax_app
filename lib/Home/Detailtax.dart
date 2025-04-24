@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tax_app/%C2%A0Tax/Tax.dart';
 import 'package:flutter_tax_app/Home/Home.dart';
 import 'package:flutter_tax_app/Share_data/Share-data.dart';
 import 'package:flutter_tax_app/userdatamodel.dart';
@@ -51,10 +52,10 @@ class _DetailertaxState extends State<Detailertax> {
       );
 
       if (res.statusCode == 200) {
+        await _loadtax();
         final deletedItem = taxData[index];
         final taxToRemove = num.parse(deletedItem['tax']?.toString() ?? '0');
 
-        await _loadtax();
         setState(() {
           taxData.removeAt(index);
           totaltax -= taxToRemove;
@@ -232,7 +233,10 @@ class _DetailertaxState extends State<Detailertax> {
         ),
         title: Align(
           alignment: Alignment.centerRight,
-          child: Text("Tax",style: TextStyle(fontWeight: FontWeight.bold),),
+          child: Text(
+            "Tax",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         centerTitle: false,
       ),
@@ -321,9 +325,7 @@ class _DetailertaxState extends State<Detailertax> {
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 255, 255, 255)),
           ),
-
-          Divider(height: 24), 
-
+          Divider(height: 24),
           Text(
             "฿$value",
             style: TextStyle(
@@ -347,8 +349,7 @@ class _DetailertaxState extends State<Detailertax> {
         color: const Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color.fromARGB(
-              55, 0, 0, 0),
+          color: const Color.fromARGB(55, 0, 0, 0),
           width: 2,
         ),
         boxShadow: [
@@ -368,7 +369,7 @@ class _DetailertaxState extends State<Detailertax> {
               Text(title,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               InkWell(
-                onTap: onEdit, 
+                onTap: onEdit,
                 child: Icon(
                   Icons.edit,
                   size: 18,
@@ -424,7 +425,7 @@ class _DetailertaxState extends State<Detailertax> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const incomepage()),
+                  MaterialPageRoute(builder: (context) => const Taxpage()),
                 );
               },
               style: ElevatedButton.styleFrom(

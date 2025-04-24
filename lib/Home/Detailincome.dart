@@ -94,6 +94,7 @@ class _DetailerState extends State<Detailer> {
               totaltaxwithhold += item['tax_withhold']!;
             }
 
+            print(dataincome);
             incomeModel?.setincome(totalAmount as int?);
             incomeModel?.setincomeData(dataincome);
             incomeModel?.settax_withhold(totaltaxwithhold as int?);
@@ -137,7 +138,7 @@ class _DetailerState extends State<Detailer> {
                 decoration: InputDecoration(
                   labelText: "Income",
                   labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold, 
+                    fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
                   filled: true,
@@ -347,9 +348,7 @@ class _DetailerState extends State<Detailer> {
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 255, 255, 255)),
           ),
-
-          Divider(height: 24), 
-
+          Divider(height: 24),
           Text(
             value,
             style: TextStyle(
@@ -366,7 +365,7 @@ class _DetailerState extends State<Detailer> {
     required String tax,
     required VoidCallback onDelete,
     required VoidCallback onDetail,
-    required VoidCallback onEdit, 
+    required VoidCallback onEdit,
   }) {
     return Container(
       padding: EdgeInsets.all(20),
@@ -375,8 +374,7 @@ class _DetailerState extends State<Detailer> {
         color: const Color.fromARGB(255, 255, 255, 255),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color.fromARGB(
-              55, 0, 0, 0), 
+          color: const Color.fromARGB(55, 0, 0, 0),
           width: 2,
         ),
         boxShadow: [
@@ -431,8 +429,7 @@ class _DetailerState extends State<Detailer> {
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .spaceAround, 
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
                   onTap: onDelete,

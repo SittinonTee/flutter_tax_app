@@ -237,7 +237,6 @@ class _HomePageState extends State<HomePage> {
     ];
 
     // if (_datauser == null) {
-    //   // แสดงหน้าโหลดหากข้อมูลยังไม่พร้อม
     //   return Scaffold(
     //     backgroundColor: const Color.fromARGB(255, 255, 255, 255),
     //     body: SafeArea(
@@ -255,7 +254,7 @@ class _HomePageState extends State<HomePage> {
     //   );
     // }
 
-    // โค้ด UI ปกติ
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(

@@ -47,8 +47,7 @@ class _LoginState extends State<Login> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => MyApp()),
       );
-    } else {
-    }
+    } else {}
   }
 
   Future<void> _login() async {
@@ -111,7 +110,7 @@ class _LoginState extends State<Login> {
   //     return true;
   //   } else {
   //     final error = jsonDecode(response.body);
-  //     print('❌ Login failed: ${error['message']}');
+  //     print(' Login failed: ${error['message']}');
   //     return false;
   //   }
   // }
@@ -129,11 +128,11 @@ class _LoginState extends State<Login> {
               child: Container(
                 width: double.infinity,
                 color: const Color.fromARGB(255, 255, 255, 255),
-                    child: Image.asset(
-                      'assets/images/tax2.jpeg',
-                      width: 500,
-                      fit: BoxFit.cover,
-                    ),
+                child: Image.asset(
+                  'assets/images/logo1.png',
+                  width: 200,
+                  // fit: BoxFit.cover,
+                ),
               ),
             ),
             Expanded(
@@ -167,8 +166,7 @@ class _LoginState extends State<Login> {
                             borderSide: BorderSide.none,
                           ),
                           errorStyle: TextStyle(
-                            color: const Color.fromARGB(
-                                255, 252, 3, 3), 
+                            color: const Color.fromARGB(255, 252, 3, 3),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -195,8 +193,7 @@ class _LoginState extends State<Login> {
                           borderSide: BorderSide.none,
                         ),
                         errorStyle: TextStyle(
-                          color: const Color.fromARGB(
-                              255, 255, 0, 0), 
+                          color: const Color.fromARGB(255, 255, 0, 0),
                           fontWeight: FontWeight.bold,
                         ),
                         suffixIcon: IconButton(
@@ -258,14 +255,12 @@ class _LoginState extends State<Login> {
                           TextSpan(
                             text: "   Signup",
                             style: TextStyle(
-                              color:
-                                  Color.fromARGB(255, 8, 156, 241),
+                              color: Color.fromARGB(255, 8, 156, 241),
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                           
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

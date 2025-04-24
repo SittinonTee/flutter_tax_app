@@ -72,10 +72,11 @@ class _BoxcontentState extends State<Boxcontent> {
     return Expanded(
       child: ListView(
         children: [
-          _buildCategoryCard(
-              'รายได้', formattedAmount, Icons.account_balance_wallet, '1'),
+          _buildCategoryCard('รายได้', formattedAmount,
+              Icons.account_balance_wallet, '1', "รายได้"),
           const SizedBox(height: 30),
-          _buildCategoryCard('ลดหย่อนภาษี', formattedtax, Icons.savings, '2'),
+          _buildCategoryCard(
+              'ลดหย่อนภาษี', formattedtax, Icons.savings, '2', "ค่าลดหย่อน"),
           const SizedBox(height: 30),
           // _buildCategoryCard('ลดหย่อนภาษี', '', Icons.savings, '3'),
           // const SizedBox(height: 15),
@@ -84,8 +85,8 @@ class _BoxcontentState extends State<Boxcontent> {
     );
   }
 
-  Widget _buildCategoryCard(
-      String title, String value, IconData icon, String Pagenum) {
+  Widget _buildCategoryCard(String title, String value, IconData icon,
+      String Pagenum, String content) {
     return Stack(
       children: [
         Container(
@@ -148,8 +149,8 @@ class _BoxcontentState extends State<Boxcontent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'รายได้ปี 2566',
+                        Text(
+                          '${content}ปี 2566',
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(

@@ -17,18 +17,22 @@ class incomepage extends StatefulWidget {
 }
 
 List<Map<String, dynamic>> incomeItems = [
-  {"title": "เงินเดือน", "value": "30,000", "icon": Icons.work},
-  {"title": "โบนัส", "value": "5,000", "icon": Icons.card_giftcard},
-  {"title": "ขายของ", "value": "10,000", "icon": Icons.store},
-  {"title": "อาหารเครื่องดื่ม", "value": "2,000", "icon": Icons.food_bank},
-  {"title": "กำไร", "value": "2,000", "icon": Icons.token},
-  {"title": "เงินปันผล", "value": "2,000", "icon": Icons.money}
+  {"title": "เงินเดือน", "value": "งานประจำปี", "icon": Icons.work},
+  {"title": "โบนัส", "value": "งานประจำปี", "icon": Icons.card_giftcard},
+  {"title": "ขายของออนไลน์", "value": "รายได้เสริม", "icon": Icons.store},
+  {
+    "title": "ขายอาหารเครื่องดื่ม",
+    "value": "รายได้เสริม",
+    "icon": Icons.food_bank
+  },
+  {"title": "อาชีพอิสระ", "value": "รายได้เสริม", "icon": Icons.token},
+  {"title": "เงินปันผล", "value": "ดอกเบี้ย", "icon": Icons.money}
 ];
-
 final Map<String, List<String>> incomeData = {
   "งานประจำปี": ["เงินเดือนและโบนัส"],
   "รายได้เสริม": ["ขายของออนไลน์", "รับจ้างออกแบบ"],
   "ดอกเบี้ย": ["บัญชีออมทรัพย์", "กองทุนรวม"],
+  // "ค่าจ้างทั่วไป": ["คอมมิชชั่น", "เบี้ยประกัน"],
 };
 
 // int dd = 0;

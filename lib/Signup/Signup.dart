@@ -53,9 +53,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 width: double.infinity,
                 child: Center(
                   child: Image.asset(
-                    'assets/images/tax2.jpeg',
-                    width: 500,
-                    fit: BoxFit.cover,
+                    'assets/images/logo2.png',
+                    width: 350,
+                    // fit: BoxFit.cover,
                   ),
                 ),
               ),
